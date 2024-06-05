@@ -12,7 +12,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Disciplina {
-    
+
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
@@ -23,4 +23,12 @@ public class Disciplina {
 
     @ManyToOne
     private Curso curso;
+
+    public Disciplina(String nome, String codigo, Integer cargaHoraria, Integer periodo) {
+        this.nome = nome;
+        this.codigo = codigo;
+        this.cargaHoraria = cargaHoraria;
+        this.periodo = periodo;
+    }
+    
 }

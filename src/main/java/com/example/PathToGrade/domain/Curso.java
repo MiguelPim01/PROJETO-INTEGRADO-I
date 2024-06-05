@@ -19,8 +19,14 @@ public class Curso {
     private Long id;
 
     private String nome;
-    private int qtdPeriodos;
+    private Integer qtdPeriodos;
 
     @OneToMany(mappedBy = "curso")
     private List<Disciplina> disciplinas;
+
+    public Curso(String nome, Integer qtdPeriodos) {
+        this.nome = nome;
+        this.qtdPeriodos = qtdPeriodos;
+    }
+    
 }
