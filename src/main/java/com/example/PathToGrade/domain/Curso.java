@@ -1,5 +1,6 @@
 package com.example.PathToGrade.domain;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.Entity;
@@ -29,6 +30,12 @@ public class Curso {
     public Curso(String nome, Integer qtdPeriodos) {
         this.nome = nome;
         this.qtdPeriodos = qtdPeriodos;
+        this.disciplinas = new ArrayList<>();
+    }
+
+    public void addDisciplina(Disciplina disciplina) {
+        disciplina.setCurso(this);
+        this.disciplinas.add(disciplina);
     }
     
 }

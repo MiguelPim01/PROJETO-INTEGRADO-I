@@ -1,12 +1,16 @@
 package com.example.PathToGrade.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.PathToGrade.domain.Curso;
+import com.example.PathToGrade.domain.Disciplina;
 import com.example.PathToGrade.service.CursoService;
 
 @RestController
@@ -23,5 +27,15 @@ public class CursoController {
     @GetMapping("/curso")
     public Iterable<Curso> getCursos() {
         return cursoService.getCursos();
+    }
+
+    @PostMapping("/curso/{cursoId}/disciplina")
+    public void postDisciplinaInCurso(@PathVariable("cursoId") Long cursoId, @RequestBody Disciplina disciplina) {
+        cursoService.saveDisciplinaFromCurso(cursoId, disciplina);
+    }
+
+    @GetMapping("/curso/{cursoId}/disciplina")
+    public List<Disciplina> getDisciplinasFromCurso(@PathVariable("cursoId") Long cursoId) {
+        return cursoService.getDisciplinasFromCurso(cursoId);
     }
 }
