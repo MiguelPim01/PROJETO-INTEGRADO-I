@@ -3,6 +3,7 @@ package com.example.PathToGrade.domain;
 import java.util.ArrayList;
 import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -24,7 +25,7 @@ public class Curso {
     private String nome;
     private Integer qtdPeriodos;
 
-    @OneToMany(mappedBy = "curso")
+    @OneToMany(mappedBy = "curso", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Disciplina> disciplinas;
 
     public Curso(String nome, Integer qtdPeriodos) {

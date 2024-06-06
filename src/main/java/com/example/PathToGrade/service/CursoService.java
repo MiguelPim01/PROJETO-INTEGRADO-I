@@ -26,16 +26,31 @@ public class CursoService {
 
     public void saveDisciplinaFromCurso(Long cursoId, Disciplina disciplina) {
         Optional<Curso> cursoOp = cursoRepository.findById(cursoId);
-        Curso curso = cursoOp.get();
 
-        curso.addDisciplina(disciplina);
-        cursoRepository.save(curso);
+        if (cursoOp.isPresent()) {
+            Curso curso = cursoOp.get();
+
+            // Faz a relação entre a Disciplina e o Curso
+            curso.addDisciplina(disciplina);
+
+            // Leva essa informação para o banco de dados
+            cursoRepository.save(curso);
+        }
+        else {
+            throw new RuntimeException("Curso não encontrado com id: " + cursoId);
+        }
     }
 
     public List<Disciplina> getDisciplinasFromCurso(Long cursoId) {
         Optional<Curso> cursoOp = cursoRepository.findById(cursoId);
-        Curso curso = cursoOp.get();
 
-        return curso.getDisciplinas();
+        if (cursoOp.isPresent()) {
+            Curso curso = cursoOp.get();
+
+            return curso.getDisciplinas();
+        }
+        else {
+            throw new RuntimeException("Curso não encontrado com id: " + cursoId);
+        }
     }
 }
