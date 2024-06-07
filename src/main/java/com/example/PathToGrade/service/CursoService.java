@@ -53,4 +53,19 @@ public class CursoService {
             throw new RuntimeException("Curso não encontrado com id: " + cursoId);
         }
     }
+
+    public void addDependencia(Long cursoId, Long disciplinaA, Long disciplinaB) {
+        Optional<Curso> cursoOp = cursoRepository.findById(cursoId);
+
+        if (cursoOp.isPresent()) {
+            Curso curso = cursoOp.get();
+
+            curso.addPreRequisito(disciplinaA, disciplinaB);
+
+            cursoRepository.save(curso);
+        }
+        else {
+            throw new RuntimeException("Curso não encontrado com id: " + cursoId);
+        }
+    }
 }

@@ -38,5 +38,24 @@ public class Curso {
         disciplina.setCurso(this);
         this.disciplinas.add(disciplina);
     }
+
+    public void addPreRequisito(Long disciplinaA, Long disciplinaB) {
+        for (Disciplina d : this.disciplinas) {
+
+            if (d.getId() == disciplinaB) {
+
+                for (Disciplina preRequisito : this.disciplinas) {
+
+                    if (preRequisito.getId() == disciplinaA) {
+                        d.addPreRequisito(preRequisito);
+
+                        return;
+                    }
+                }
+            }
+        }
+
+        throw new RuntimeException("fatal error: Alguma disciplina enviada não existe no curso...");
+    }
     
 }

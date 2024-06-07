@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.PathToGrade.domain.Curso;
+import com.example.PathToGrade.domain.Dependencia;
 import com.example.PathToGrade.domain.Disciplina;
 import com.example.PathToGrade.service.CursoService;
 
@@ -37,5 +38,10 @@ public class CursoController {
     @GetMapping("/curso/{cursoId}/disciplina")
     public List<Disciplina> getDisciplinasFromCurso(@PathVariable("cursoId") Long cursoId) {
         return cursoService.getDisciplinasFromCurso(cursoId);
+    }
+
+    @PostMapping("/curso/{cursoId}/dependencia")
+    public void postDependencia(@PathVariable("cursoId") Long cursoId, @RequestBody Dependencia dependencia) {
+        cursoService.addDependencia(cursoId, dependencia.getDisciplinaA(), dependencia.getDisciplinaB());
     }
 }

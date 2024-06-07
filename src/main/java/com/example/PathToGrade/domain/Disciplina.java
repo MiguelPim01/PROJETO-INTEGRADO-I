@@ -45,5 +45,8 @@ public class Disciplina {
         this.periodo = periodo;
         this.dependencias = new ArrayList<>();
     }
-    
+
+    public void addPreRequisito(Disciplina disciplina) {
+        this.dependencias.add(disciplina);
+    } 
 }
