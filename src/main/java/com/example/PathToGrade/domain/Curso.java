@@ -40,22 +40,31 @@ public class Curso {
     }
 
     public void addPreRequisito(Long disciplinaA, Long disciplinaB) {
+        Disciplina disciplina = null, preRequisito = null;
+
         for (Disciplina d : this.disciplinas) {
-
-            if (d.getId() == disciplinaB) {
-
-                for (Disciplina preRequisito : this.disciplinas) {
-
-                    if (preRequisito.getId() == disciplinaA) {
-                        d.addPreRequisito(preRequisito);
-
-                        return;
-                    }
-                }
+            if (d.getId() == disciplinaA) {
+                preRequisito = d;
+                break;
             }
         }
 
-        throw new RuntimeException("fatal error: Alguma disciplina enviada não existe no curso...");
+        if (preRequisito == null) {
+            throw new RuntimeException("fatal error: Disciplina não encontrada, id: " + disciplinaA);
+        }
+
+        for (Disciplina d : this.disciplinas) {
+            if (d.getId() == disciplinaB) {
+                disciplina = d;
+                break;
+            }
+        }
+
+        if (disciplina == null) {
+            throw new RuntimeException("fatal error: Disciplina não encontrada, id: " + disciplinaB);
+        }
+
+        disciplina.addPreRequisito(preRequisito);
     }
     
 }
