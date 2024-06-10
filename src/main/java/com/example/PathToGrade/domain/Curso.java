@@ -64,7 +64,7 @@ public class Curso {
             throw new RuntimeException("fatal error: Disciplina não encontrada, id: " + disciplinaB);
         }
 
-        disciplina.addPreRequisito(preRequisito);
+        disciplina.addArestaChegando(preRequisito);
     }
     
 }
