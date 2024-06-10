@@ -54,7 +54,7 @@ public class CursoService {
         }
     }
 
-    public void addDependencia(Long cursoId, Long disciplinaA, Long disciplinaB) {
+    public void addDependencia(Long cursoId, String disciplinaA, String disciplinaB) {
         Optional<Curso> cursoOp = cursoRepository.findById(cursoId);
 
         if (cursoOp.isPresent()) {

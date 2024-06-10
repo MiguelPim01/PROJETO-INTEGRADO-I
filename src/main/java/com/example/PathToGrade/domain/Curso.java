@@ -39,11 +39,11 @@ public class Curso {
         this.disciplinas.add(disciplina);
     }
 
-    public void addPreRequisito(Long disciplinaA, Long disciplinaB) {
+    public void addPreRequisito(String disciplinaA, String disciplinaB) {
         Disciplina disciplina = null, preRequisito = null;
 
         for (Disciplina d : this.disciplinas) {
-            if (d.getId() == disciplinaA) {
+            if (d.getCodigo().equals(disciplinaA)) {
                 preRequisito = d;
                 break;
             }
@@ -54,7 +54,7 @@ public class Curso {
         }
 
         for (Disciplina d : this.disciplinas) {
-            if (d.getId() == disciplinaB) {
+            if (d.getCodigo().equals(disciplinaB)) {
                 disciplina = d;
                 break;
             }

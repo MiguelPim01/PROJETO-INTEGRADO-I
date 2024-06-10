@@ -20,14 +20,25 @@ public class CursoController {
     @Autowired
     private CursoService cursoService;
 
+    /*
+     *  Operações HTTP para serem feitas com Curso
+     */
+    @GetMapping("/curso")
+    public Iterable<Curso> getCursos() {
+        return cursoService.getCursos();
+    }
+
     @PostMapping("/curso")
     public void postCurso(@RequestBody Curso curso) {
         cursoService.saveCurso(curso);
     }
 
-    @GetMapping("/curso")
-    public Iterable<Curso> getCursos() {
-        return cursoService.getCursos();
+    /*
+     *  Operações HTTP para serem feitas com Disciplina
+     */
+    @GetMapping("/curso/{cursoId}/disciplina")
+    public List<Disciplina> getDisciplinasFromCurso(@PathVariable("cursoId") Long cursoId) {
+        return cursoService.getDisciplinasFromCurso(cursoId);
     }
 
     @PostMapping("/curso/{cursoId}/disciplina")
@@ -35,11 +46,9 @@ public class CursoController {
         cursoService.saveDisciplinaFromCurso(cursoId, disciplina);
     }
 
-    @GetMapping("/curso/{cursoId}/disciplina")
-    public List<Disciplina> getDisciplinasFromCurso(@PathVariable("cursoId") Long cursoId) {
-        return cursoService.getDisciplinasFromCurso(cursoId);
-    }
-
+    /*
+     *  Operações HTTP para adicionar um pré requisito a uma disciplina
+     */
     @PostMapping("/curso/{cursoId}/dependencia")
     public void postDependencia(@PathVariable("cursoId") Long cursoId, @RequestBody Dependencia dependencia) {
         cursoService.addDependencia(cursoId, dependencia.getDisciplinaA(), dependencia.getDisciplinaB());

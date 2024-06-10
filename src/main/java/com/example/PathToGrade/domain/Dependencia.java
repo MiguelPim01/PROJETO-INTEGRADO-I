@@ -9,6 +9,6 @@ import lombok.Setter;
 @NoArgsConstructor
 public class Dependencia {
     
-    private Long disciplinaA;
-    private Long disciplinaB;
+    private String disciplinaA;
+    private String disciplinaB;
 }
