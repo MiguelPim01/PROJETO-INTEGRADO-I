@@ -3,6 +3,7 @@ package com.example.PathToGrade.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,6 +32,11 @@ public class CursoController {
     @PostMapping("/curso")
     public void postCurso(@RequestBody Curso curso) {
         cursoService.saveCurso(curso);
+    }
+
+    @DeleteMapping("/curso/{cursoId}")
+    public void deleteCurso(@PathVariable(name = "cursoId") Long id) {
+        cursoService.deleteCurso(id);
     }
 
     /*

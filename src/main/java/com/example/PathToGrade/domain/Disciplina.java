@@ -3,17 +3,14 @@ package com.example.PathToGrade.domain;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.example.PathToGrade.dto.DisciplinaDTO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -32,8 +29,7 @@ public class Disciplina {
     private Integer cargaHoraria;
     private Integer periodo;
 
-    @OneToMany(mappedBy = "disciplina", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<DisciplinaDTO> dependencias;
+    private List<String> dependencias;
 
     @ManyToOne
     @JoinColumn(name = "curso_id")
@@ -45,12 +41,13 @@ public class Disciplina {
         this.codigo = codigo;
         this.cargaHoraria = cargaHoraria;
         this.periodo = periodo;
-        this.dependencias = new ArrayList<>();
     }
 
     public void addPreRequisito(Disciplina preRequisito) {
-        DisciplinaDTO disciplinaDTO = new DisciplinaDTO(preRequisito);
+        if (this.dependencias == null) {
+            this.dependencias = new ArrayList<>();
+        }
 
-        this.dependencias.add(disciplinaDTO);
-    } 
+        this.dependencias.add(preRequisito.codigo);
+    }
 }

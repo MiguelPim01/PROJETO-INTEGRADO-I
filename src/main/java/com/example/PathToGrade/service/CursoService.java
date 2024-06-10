@@ -24,6 +24,10 @@ public class CursoService {
         return cursoRepository.findAll();
     }
 
+    public void deleteCurso(Long id)  {
+        cursoRepository.deleteById(id);
+    }
+
     public void saveDisciplinaFromCurso(Long cursoId, Disciplina disciplina) {
         Optional<Curso> cursoOp = cursoRepository.findById(cursoId);
 
