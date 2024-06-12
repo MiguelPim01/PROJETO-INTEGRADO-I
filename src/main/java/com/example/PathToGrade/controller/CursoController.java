@@ -52,6 +52,11 @@ public class CursoController {
         cursoService.saveDisciplinaFromCurso(cursoId, disciplina);
     }
 
+    @DeleteMapping("/curso/{cursoId}/disciplina/{disciplinaId}")
+    public void deleteDisciplinaFromCurso(@PathVariable("cursoId") Long cId, @PathVariable("disciplinaId") Long dId) {
+        cursoService.deleteDisciplinaFromCurso(cId, dId);
+    }
+
     /*
      *  Operações HTTP para adicionar um pré requisito a uma disciplina
      */

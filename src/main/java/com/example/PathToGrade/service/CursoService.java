@@ -85,6 +85,26 @@ public class CursoService {
         }
     }
 
+    public void deleteDisciplinaFromCurso(Long cursoId, Long disciplinaId) {
+        Optional<Curso> cursoOp = cursoRepository.findById(cursoId);
+
+        if (cursoOp.isPresent()) {
+            Curso curso = cursoOp.get();
+
+            for (Disciplina d : curso.getDisciplinas()) {
+                if (d.getId().equals(disciplinaId)) {
+                    curso.getDisciplinas().remove(d);
+                    return;
+                }
+            }
+
+            throw new RuntimeException("Disciplina nao encontrada!");
+        }
+        else {
+            throw new RuntimeException("Curso não encontrado com id: " + cursoId);
+        }
+    }
+
     public void addDependencia(Long cursoId, String disciplinaA, String disciplinaB) {
         Optional<Curso> cursoOp = cursoRepository.findById(cursoId);
 
