@@ -37,6 +37,22 @@ public class CursoService {
         return cursoRepository.findAll();
     }
 
+    public void modifyCurso(Long cursoId, Curso curso) {
+        Optional<Curso> cursoOp = cursoRepository.findById(cursoId);
+
+        if (cursoOp.isPresent()) {
+            Curso c = cursoOp.get();
+
+            c.setNome(curso.getNome());
+            c.setQtdPeriodos(curso.getQtdPeriodos());
+
+            cursoRepository.save(c);
+        }
+        else {
+            throw new RuntimeException("Curso não encontrado com id: " + cursoId);
+        }
+    }
+
     public void deleteCurso(Long id)  {
         cursoRepository.deleteById(id);
     }

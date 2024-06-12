@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -34,9 +35,14 @@ public class CursoController {
         cursoService.saveCurso(curso);
     }
 
+    @PutMapping("/curso/{cursoId}")
+    public void putCurso(@PathVariable("cursoId") Long cursoId, @RequestBody Curso curso) {
+        cursoService.modifyCurso(cursoId, curso);
+    }
+
     @DeleteMapping("/curso/{cursoId}")
-    public void deleteCurso(@PathVariable(name = "cursoId") Long id) {
-        cursoService.deleteCurso(id);
+    public void deleteCurso(@PathVariable(name = "cursoId") Long cursoId) {
+        cursoService.deleteCurso(cursoId);
     }
 
     /*
