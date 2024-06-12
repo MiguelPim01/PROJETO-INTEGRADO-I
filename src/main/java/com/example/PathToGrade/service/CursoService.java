@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.PathToGrade.domain.Curso;
+import com.example.PathToGrade.domain.Dependencia;
 import com.example.PathToGrade.domain.Disciplina;
 import com.example.PathToGrade.repository.CursoRepository;
 
@@ -40,7 +41,7 @@ public class CursoService {
         cursoRepository.deleteById(id);
     }
 
-    public void saveDisciplinaFromCurso(Long cursoId, Disciplina disciplina) {
+    public void saveDisciplinaInCurso(Long cursoId, Disciplina disciplina) {
         Optional<Curso> cursoOp = cursoRepository.findById(cursoId);
 
         if (cursoOp.isPresent()) {
@@ -105,6 +106,13 @@ public class CursoService {
         }
     }
 
+    public void saveDisciplinaListInCurso(Long cursoId, List<Disciplina> disciplinas) {
+        
+        for (Disciplina d : disciplinas) {
+            this.saveDisciplinaInCurso(cursoId, d);    
+        }
+    }
+
     public void addDependencia(Long cursoId, String disciplinaA, String disciplinaB) {
         Optional<Curso> cursoOp = cursoRepository.findById(cursoId);
 
@@ -117,6 +125,12 @@ public class CursoService {
         }
         else {
             throw new RuntimeException("Curso não encontrado com id: " + cursoId);
+        }
+    }
+
+    public void addDependenciaListInCurso(Long cursoId, List<Dependencia> dependencias) {
+        for (Dependencia d : dependencias) {
+            this.addDependencia(cursoId, d.getDisciplinaA(), d.getDisciplinaB());
         }
     }
 }

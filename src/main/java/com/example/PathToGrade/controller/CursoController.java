@@ -49,12 +49,18 @@ public class CursoController {
 
     @PostMapping("/curso/{cursoId}/disciplina")
     public void postDisciplinaInCurso(@PathVariable("cursoId") Long cursoId, @RequestBody Disciplina disciplina) {
-        cursoService.saveDisciplinaFromCurso(cursoId, disciplina);
+        cursoService.saveDisciplinaInCurso(cursoId, disciplina);
     }
 
     @DeleteMapping("/curso/{cursoId}/disciplina/{disciplinaId}")
     public void deleteDisciplinaFromCurso(@PathVariable("cursoId") Long cId, @PathVariable("disciplinaId") Long dId) {
         cursoService.deleteDisciplinaFromCurso(cId, dId);
+    }
+
+    // Funcao para adicionar uma lista de disciplinas em um curso especifico
+    @PostMapping("/curso/{cursoId}/disciplinas")
+    public void postDisciplinaListInCurso(@PathVariable("cursoId") Long cursoId, @RequestBody List<Disciplina> disciplinas) {
+        cursoService.saveDisciplinaListInCurso(cursoId, disciplinas);
     }
 
     /*
@@ -63,5 +69,11 @@ public class CursoController {
     @PostMapping("/curso/{cursoId}/dependencia")
     public void postDependencia(@PathVariable("cursoId") Long cursoId, @RequestBody Dependencia dependencia) {
         cursoService.addDependencia(cursoId, dependencia.getDisciplinaA(), dependencia.getDisciplinaB());
+    }
+
+    // Funcao para adicionar uma lista de arestas em um curso especifico
+    @PostMapping("curso/{cursoId}/dependencias")
+    public void postDependenciaListInCurso(@PathVariable("cursoId") Long cursoId, @RequestBody List<Dependencia> dependencias) {
+        cursoService.addDependenciaListInCurso(cursoId, dependencias);
     }
 }
