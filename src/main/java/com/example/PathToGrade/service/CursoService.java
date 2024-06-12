@@ -102,8 +102,37 @@ public class CursoService {
         }
     }
 
+    public void modifyDisciplinaFromCurso(Long cursoId, Long disciplinaId, Disciplina disciplina) {
+        Optional<Curso> cursoOp = cursoRepository.findById(cursoId);
+
+        if (cursoOp.isPresent()) {
+            Curso curso = cursoOp.get();
+
+            // Verifica se a disciplina é invalida
+            if (disciplina.getCodigo() == null || 
+            disciplina.getNome() == null || 
+            !(disciplina.getPeriodo() > 0 && disciplina.getPeriodo() <= curso.getQtdPeriodos()) ||
+            disciplina.getCargaHoraria() == null) {
+                throw new RuntimeException("Error: Disciplina Inválida!");
+            }
+
+            for (Disciplina d : curso.getDisciplinas()) {
+                if (d.getId().equals(disciplinaId)) {
+                    d.modifyDisciplina(disciplina);
+                    break;
+                }
+            }
+
+            cursoRepository.save(curso);
+        }
+        else {
+            throw new RuntimeException("Curso não encontrado com id: " + cursoId);
+        }
+    }
+
     public void deleteDisciplinaFromCurso(Long cursoId, Long disciplinaId) {
         Optional<Curso> cursoOp = cursoRepository.findById(cursoId);
+        boolean flag = false;
 
         if (cursoOp.isPresent()) {
             Curso curso = cursoOp.get();
@@ -111,11 +140,17 @@ public class CursoService {
             for (Disciplina d : curso.getDisciplinas()) {
                 if (d.getId().equals(disciplinaId)) {
                     curso.getDisciplinas().remove(d);
-                    return;
+                    flag = true;
+                    break;
                 }
             }
 
-            throw new RuntimeException("Disciplina nao encontrada!");
+            if (flag) {
+                cursoRepository.save(curso);
+            }
+            else {
+                throw new RuntimeException("Error: Disciplina não existe!");
+            }
         }
         else {
             throw new RuntimeException("Curso não encontrado com id: " + cursoId);

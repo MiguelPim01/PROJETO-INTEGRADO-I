@@ -58,6 +58,11 @@ public class CursoController {
         cursoService.saveDisciplinaInCurso(cursoId, disciplina);
     }
 
+    @PutMapping("/curso/{cursoId}/disciplina/{disciplinaId}")
+    public void putDisciplinaFromCurso(@PathVariable("cursoId") Long cId, @PathVariable("disciplinaId") Long dId, @RequestBody Disciplina disciplina) {
+        cursoService.modifyDisciplinaFromCurso(cId, dId, disciplina);
+    }
+
     @DeleteMapping("/curso/{cursoId}/disciplina/{disciplinaId}")
     public void deleteDisciplinaFromCurso(@PathVariable("cursoId") Long cId, @PathVariable("disciplinaId") Long dId) {
         cursoService.deleteDisciplinaFromCurso(cId, dId);

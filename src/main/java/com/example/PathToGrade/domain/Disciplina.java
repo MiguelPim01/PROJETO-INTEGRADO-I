@@ -68,4 +68,19 @@ public class Disciplina {
     public void addArestaSaindo(Aresta a) {
         this.arestasSaindo.add(a);
     }
+
+    public void modifyDisciplina(Disciplina novaDisciplina) {
+        this.nome = novaDisciplina.nome;
+        this.codigo = novaDisciplina.codigo;
+        this.cargaHoraria = novaDisciplina.cargaHoraria;
+        this.periodo = novaDisciplina.periodo;
+
+        for (Aresta a : this.getArestasChegando()) {
+            a.setDestinoCodigo(this.codigo);
+        }
+
+        for (Aresta a : this.getArestasSaindo()) {
+            a.setOrigemCodigo(this.codigo);
+        }
+    }
 }
