@@ -54,6 +54,12 @@ public class Disciplina {
     public void addArestaChegando(Disciplina preRequisito) {
         Aresta a = new Aresta(preRequisito, this);
 
+        for (Aresta ar : this.arestasChegando) {
+            if (ar.getOrigemCodigo().equals(a.getOrigemCodigo()) && ar.getDestinoCodigo().equals(a.getDestinoCodigo())) {
+                throw new RuntimeException("fatal error: A dependencia já existe neste curso.");
+            }
+        }
+
         this.arestasChegando.add(a);
 
         preRequisito.addArestaSaindo(a);

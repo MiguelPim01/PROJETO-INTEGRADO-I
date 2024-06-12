@@ -17,6 +17,18 @@ public class CursoService {
     private CursoRepository cursoRepository;
 
     public void saveCurso(Curso curso) {
+        if (curso.getNome() == null || !(curso.getQtdPeriodos() > 0 && curso.getQtdPeriodos() <= 12)) {
+            throw new RuntimeException("Error: Curso Inválido!");
+        }
+
+        Iterable<Curso> cursos = cursoRepository.findAll();
+
+        for (Curso c : cursos) {
+            if (c.getNome().equals(curso.getNome()) && c.getQtdPeriodos() == curso.getQtdPeriodos()) {
+                throw new RuntimeException("Error: Curso já existe!");
+            }
+        }
+
         cursoRepository.save(curso);
     }
 
@@ -33,6 +45,21 @@ public class CursoService {
 
         if (cursoOp.isPresent()) {
             Curso curso = cursoOp.get();
+
+            // Verifica se a disciplina é invalida
+            if (disciplina.getCodigo() == null || 
+            disciplina.getNome() == null || 
+            !(disciplina.getPeriodo() > 0 && disciplina.getPeriodo() <= curso.getQtdPeriodos()) ||
+            disciplina.getCargaHoraria() == null) {
+                throw new RuntimeException("Error: Disciplina Inválida!");
+            }
+
+            // Verifica se a disciplina ja existe no curso
+            for (Disciplina d : curso.getDisciplinas()) {
+                if (d.getCodigo().equals(disciplina.getCodigo())) {
+                    throw new RuntimeException("Error: Disciplina já existe!");
+                }
+            }
 
             // Faz a relação entre a Disciplina e o Curso
             curso.addDisciplina(disciplina);
