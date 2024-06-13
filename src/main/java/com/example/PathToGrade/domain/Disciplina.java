@@ -32,9 +32,11 @@ public class Disciplina {
     private Integer periodo;
 
     @OneToMany(mappedBy = "origem", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private List<Aresta> arestasSaindo;
 
     @OneToMany(mappedBy = "destino", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private List<Aresta> arestasChegando;
 
     @ManyToOne
