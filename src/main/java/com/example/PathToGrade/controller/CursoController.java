@@ -1,7 +1,9 @@
 package com.example.PathToGrade.controller;
 
 import java.util.List;
+import java.util.Set;
 
+import org.antlr.v4.runtime.misc.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -86,5 +88,13 @@ public class CursoController {
     @PostMapping("curso/{cursoId}/preRequisitos")
     public void postDependenciaListInCurso(@PathVariable("cursoId") Long cursoId, @RequestBody List<Dependencia> dependencias) {
         cursoService.addDependenciaListInCurso(cursoId, dependencias);
+    }
+
+    /*
+     *  Operações HTTP para retornar o caminho ao endpoint
+     */
+    @GetMapping("curso/{cursoId}/path/{disciplinaId}")
+    public Set<Pair<Disciplina, Disciplina>> getPathFromDisciplina(@PathVariable("cursoId") Long cId, @PathVariable("disciplinaId") Long dId) {
+        return cursoService.getPathFromDisciplina(cId, dId);
     }
 }

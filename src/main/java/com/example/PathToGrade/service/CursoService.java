@@ -2,7 +2,9 @@ package com.example.PathToGrade.service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
+import org.antlr.v4.runtime.misc.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -182,6 +184,19 @@ public class CursoService {
     public void addDependenciaListInCurso(Long cursoId, List<Dependencia> dependencias) {
         for (Dependencia d : dependencias) {
             this.addDependencia(cursoId, d.getDisciplinaA(), d.getDisciplinaB());
+        }
+    }
+
+    public Set<Pair<Disciplina, Disciplina>> getPathFromDisciplina(Long cId, Long dId) {
+        Optional<Curso> cursoOp = cursoRepository.findById(cId);
+
+        if (cursoOp.isPresent()) {
+            Curso curso = cursoOp.get();
+
+            return curso.findPathToDisciplina(dId);
+        }
+        else {
+            throw new RuntimeException("Curso não encontrado com id: " + cId);
         }
     }
 }
