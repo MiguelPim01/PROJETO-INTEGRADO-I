@@ -77,13 +77,13 @@ public class CursoController {
     /*
      *  Operações HTTP para adicionar um pré requisito a uma disciplina
      */
-    @PostMapping("/curso/{cursoId}/dependencia")
+    @PostMapping("/curso/{cursoId}/preRequisito")
     public void postDependencia(@PathVariable("cursoId") Long cursoId, @RequestBody Dependencia dependencia) {
         cursoService.addDependencia(cursoId, dependencia.getDisciplinaA(), dependencia.getDisciplinaB());
     }
 
     // Funcao para adicionar uma lista de arestas em um curso especifico
-    @PostMapping("curso/{cursoId}/dependencias")
+    @PostMapping("curso/{cursoId}/preRequisitos")
     public void postDependenciaListInCurso(@PathVariable("cursoId") Long cursoId, @RequestBody List<Dependencia> dependencias) {
         cursoService.addDependenciaListInCurso(cursoId, dependencias);
     }
