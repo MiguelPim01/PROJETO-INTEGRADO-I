@@ -26,6 +26,8 @@ import lombok.Setter;
  * Essas disciplinas contém objetos da classe Aresta que conectam duas disciplinas diferentes em uma relação direcional.
  * <p>
  * Com isso temos todos os elementos de um grafo a partir da classe Curso.
+ * 
+ * @version %I%, %G%
  */
 @Entity
 @Getter
