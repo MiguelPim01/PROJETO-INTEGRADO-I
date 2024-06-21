@@ -17,32 +17,72 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * <i>Documentação da classe Curso</i>
+ * @author Miguel Vieira Machado Pim
+ * @see com.example.PathToGrade.domain.Curso
+ * 
+ * A classe curso é a abstração de um grafo, ela armazena objetos da classe Disciplina, que são os vértices.
+ * Essas disciplinas contém objetos da classe Aresta que conectam duas disciplinas diferentes em uma relação direcional.
+ * <p>
+ * Com isso temos todos os elementos de um grafo a partir da classe Curso.
+ */
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
 public class Curso {
     
+    /**
+     * Id utilizado pelo banco de dados.
+     */
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    /**
+     * Nome do curso.
+     */
     private String nome;
+
+    /**
+     * Quantidade total de períodos que o curso tem.
+     */
     private Integer qtdPeriodos;
 
+    /**
+     * Lista de todas as matérias que o curso oferece.
+     */
     @OneToMany(mappedBy = "curso", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Disciplina> disciplinas;
 
+    /**
+     * Construtor.
+     * 
+     * @param nome nome do curso a ser criado. Não pode ser <code>null</code>
+     * @param qtdPeriodos quantidade de períodos do curso
+     */
     public Curso(String nome, Integer qtdPeriodos) {
         this.nome = nome;
         this.qtdPeriodos = qtdPeriodos;
         this.disciplinas = new ArrayList<>();
     }
 
+    /**
+     * Adiciona uma disciplina ao curso.
+     * 
+     * @param disciplina referência para a disciplina que será adicionada. Não pode ser <code>null</code>
+     */
     public void addDisciplina(Disciplina disciplina) {
         disciplina.setCurso(this);
         this.disciplinas.add(disciplina);
     }
 
+    /**
+     * Adiciona um pré-requisito ao curso, ou seja, uma aresta.
+     * 
+     * @param disciplinaA
+     * @param disciplinaB
+     */
     public void addPreRequisito(String disciplinaA, String disciplinaB) {
         Disciplina disciplina = null, preRequisito = null;
 
@@ -71,6 +111,13 @@ public class Curso {
         disciplina.addArestaChegando(preRequisito);
     }
 
+    /**
+     * A partir de uma disciplina específica, o método vai fazer um dfs no grafo, tanto no sentido normal das arestas
+     * quanto no sentido contrário delas, para achar todas as outras disciplinas do curso que é possível chegar a partir dela.
+     * 
+     * @param disciplinaId id da disciplina em que o dfs irá iniciar.
+     * @return <code>Set<Pair<Disciplina, Disciplina>></code> com todas as disciplinas que encontrou ao fazer o dfs.
+     */
     public Set<Pair<Disciplina, Disciplina>> findPathToDisciplina(Long disciplinaId) {
         Set<Disciplina> visitados = new HashSet<>();
         Set<Pair<Disciplina, Disciplina>> dependencias = new HashSet<>();
@@ -96,6 +143,13 @@ public class Curso {
         return dependencias;
     }
 
+    /**
+     * Realiza o algoritmo de dfs no sentido normal das arestas.
+     * 
+     * @param dependencias <code>Set<Pair<Disciplina, Disciplina>></code> armazena um conjunto de pares de disciplinas.
+     * @param visitados <code>Set<Disciplina></code> armazena todas as disciplinas que já foram visitadas.
+     * @param atual vértice que o algoritmo irá visitar.
+     */
     public void dfs(Set<Pair<Disciplina, Disciplina>> dependencias, Set<Disciplina> visitados, Disciplina atual) {
         for (Aresta a : atual.getArestasSaindo()) {
             if (!visitados.contains(a.getDestino())) {
@@ -106,6 +160,13 @@ public class Curso {
         }
     }
 
+    /**
+     * Realiza o algoritmo de dfs no sentido inverso das arestas.
+     * 
+     * @param dependencias <code>Set<Pair<Disciplina, Disciplina>></code> armazena um conjunto de pares de disciplinas.
+     * @param visitados <code>Set<Disciplina></code> armazena todas as disciplinas que já foram visitadas.
+     * @param atual vértice que o algoritmo irá visitar.
+     */
     public void dfsTransp(Set<Pair<Disciplina, Disciplina>> dependencias, Set<Disciplina> visitados, Disciplina atual) {
         for (Aresta a : atual.getArestasChegando()) {
             if (!visitados.contains(a.getOrigem())) {
