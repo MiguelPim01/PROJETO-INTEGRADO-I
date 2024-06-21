@@ -11,4 +11,9 @@ public class Dependencia {
     
     private String disciplinaA;
     private String disciplinaB;
+
+    public Dependencia(String disciplinaA, String disciplinaB) {
+        this.disciplinaA = disciplinaA;
+        this.disciplinaB = disciplinaB;
+    }
 }
