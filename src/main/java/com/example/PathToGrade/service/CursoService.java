@@ -13,12 +13,28 @@ import com.example.PathToGrade.domain.Dependencia;
 import com.example.PathToGrade.domain.Disciplina;
 import com.example.PathToGrade.repository.CursoRepository;
 
+/**
+ * <i>Documentação da classe CursoService</i>
+ * @author Miguel Vieira Machado Pim
+ * @see com.example.PathToGrade.service.CursoService
+ * 
+ * Está classe prove para a controladora uma interface de métodos para tudo que envolva o repositório de cursos.
+ */
 @Service
 public class CursoService {
     
+    /**
+     * Repositório de Cursos.
+     */
     @Autowired
     private CursoRepository cursoRepository;
 
+    /**
+     * Salva um Curso no repositório.
+     * 
+     * @param curso Curso a ser salvo.
+     * @throws RunTimeException
+     */
     public void saveCurso(Curso curso) {
         if (curso.getNome() == null || !(curso.getQtdPeriodos() > 0 && curso.getQtdPeriodos() <= 12)) {
             throw new RuntimeException("Error: Curso Inválido!");
@@ -35,10 +51,22 @@ public class CursoService {
         cursoRepository.save(curso);
     }
 
+    /**
+     * Retorna todos os Cursos do repositório.
+     * 
+     * @return lista de Cursos.
+     */
     public Iterable<Curso> getCursos() {
         return cursoRepository.findAll();
     }
 
+    /**
+     * Modifica um Curso específico no repositório.
+     * 
+     * @param cursoId id do Curso.
+     * @param curso novo Curso contendo as informações a serem modificadas.
+     * @throws RunTimeException
+     */
     public void modifyCurso(Long cursoId, Curso curso) {
         Optional<Curso> cursoOp = cursoRepository.findById(cursoId);
 
@@ -55,10 +83,22 @@ public class CursoService {
         }
     }
 
+    /**
+     * Deleta um Curso do repositório.
+     * 
+     * @param id id do Curso.
+     */
     public void deleteCurso(Long id)  {
         cursoRepository.deleteById(id);
     }
 
+    /**
+     * Salva uma Disciplina em um Curso específico.
+     * 
+     * @param cursoId id do Curso.
+     * @param disciplina Disciplina a ser inserida.
+     * @throws RunTimeException
+     */
     public void saveDisciplinaInCurso(Long cursoId, Disciplina disciplina) {
         Optional<Curso> cursoOp = cursoRepository.findById(cursoId);
 
@@ -91,6 +131,13 @@ public class CursoService {
         }
     }
 
+    /**
+     * Retorna todas as disiciplinas de um Curso específico.
+     * 
+     * @param cursoId id do Curso.
+     * @return Lista de Disciplinas.
+     * @throws RunTimeException
+     */
     public List<Disciplina> getDisciplinasFromCurso(Long cursoId) {
         Optional<Curso> cursoOp = cursoRepository.findById(cursoId);
 
@@ -104,6 +151,14 @@ public class CursoService {
         }
     }
 
+    /**
+     * Modifica um Disciplina de um Curso específico.
+     * 
+     * @param cursoId id do Curso.
+     * @param disciplinaId id da Disciplina.
+     * @param disciplina nova Disciplina contendo as informações a serem modificadas.
+     * @throws RunTimeException
+     */
     public void modifyDisciplinaFromCurso(Long cursoId, Long disciplinaId, Disciplina disciplina) {
         Optional<Curso> cursoOp = cursoRepository.findById(cursoId);
 
@@ -132,6 +187,13 @@ public class CursoService {
         }
     }
 
+    /**
+     * Deleta um Disciplina de um Curso específico.
+     * 
+     * @param cursoId id do Curso.
+     * @param disciplinaId id da Disciplina.
+     * @throws RunTimeException
+     */
     public void deleteDisciplinaFromCurso(Long cursoId, Long disciplinaId) {
         Optional<Curso> cursoOp = cursoRepository.findById(cursoId);
         boolean flag = false;
@@ -159,6 +221,12 @@ public class CursoService {
         }
     }
 
+    /**
+     * Salva uma lista de Disciplinas em um Curso específico.
+     * 
+     * @param cursoId id do Curso.
+     * @param disciplinas lista de Disciplinas a serem inseridas.
+     */
     public void saveDisciplinaListInCurso(Long cursoId, List<Disciplina> disciplinas) {
         
         for (Disciplina d : disciplinas) {
@@ -166,6 +234,14 @@ public class CursoService {
         }
     }
 
+    /**
+     * Adiciona um pré-requisito a um Curso específico.
+     * 
+     * @param cursoId id do Curso.
+     * @param disciplinaA código do pré-requisito.
+     * @param disciplinaB código da Disciplina.
+     * @throws RunTimeException
+     */
     public void addDependencia(Long cursoId, String disciplinaA, String disciplinaB) {
         Optional<Curso> cursoOp = cursoRepository.findById(cursoId);
 
@@ -181,12 +257,27 @@ public class CursoService {
         }
     }
 
+    /**
+     * Adiciona um lista de pré-requisitos a um Curso específico.
+     * 
+     * @param cursoId id do Curso.
+     * @param dependencias lista de Dependencias.
+     */
     public void addDependenciaListInCurso(Long cursoId, List<Dependencia> dependencias) {
         for (Dependencia d : dependencias) {
             this.addDependencia(cursoId, d.getDisciplinaA(), d.getDisciplinaB());
         }
     }
 
+    /**
+     * Acha todas as disciplinas que podem ser encontradas a partir de dois dfs's (no grafo normal e transposto) 
+     * com aquela disciplina sendo o ponto inicial.
+     * 
+     * @param cId id do Curso.
+     * @param dId id da Disciplina.
+     * @return conjunto de pares de disciplinas. Indicam todos os caminhos pelos quais os dfs's andaram.
+     * @throws RunTimeException
+     */
     public Set<Pair<Disciplina, Disciplina>> getPathFromDisciplina(Long cId, Long dId) {
         Optional<Curso> cursoOp = cursoRepository.findById(cId);
 
@@ -199,4 +290,5 @@ public class CursoService {
             throw new RuntimeException("Curso não encontrado com id: " + cId);
         }
     }
+
 }
