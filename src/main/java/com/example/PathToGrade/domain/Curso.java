@@ -72,7 +72,7 @@ public class Curso {
     /**
      * Adiciona uma disciplina ao curso.
      * 
-     * @param disciplina referência para a disciplina que será adicionada. Não pode ser <code>null</code>
+     * @param disciplina referência para a disciplina que será adicionada. Não pode ser <code>null</code>.
      */
     public void addDisciplina(Disciplina disciplina) {
         disciplina.setCurso(this);
@@ -82,8 +82,8 @@ public class Curso {
     /**
      * Adiciona um pré-requisito ao curso, ou seja, uma aresta.
      * 
-     * @param disciplinaA
-     * @param disciplinaB
+     * @param disciplinaA disciplina pré-requisito. Não pode ser <code>null</code>.
+     * @param disciplinaB disciplina. Não pode ser <code>null</code>.
      */
     public void addPreRequisito(String disciplinaA, String disciplinaB) {
         Disciplina disciplina = null, preRequisito = null;
@@ -118,7 +118,7 @@ public class Curso {
      * quanto no sentido contrário delas, para achar todas as outras disciplinas do curso que é possível chegar a partir dela.
      * 
      * @param disciplinaId id da disciplina em que o dfs irá iniciar.
-     * @return <code>Set<Pair<Disciplina, Disciplina>></code> com todas as disciplinas que encontrou ao fazer o dfs.
+     * @return Um conjunto com todos os pares de disciplinas encontrado pelo {@link #dfs(Set, Set, Disciplina)} e {@link #dfsTransp(Set, Set, Disciplina)}.
      */
     public Set<Pair<Disciplina, Disciplina>> findPathToDisciplina(Long disciplinaId) {
         Set<Disciplina> visitados = new HashSet<>();
@@ -148,8 +148,8 @@ public class Curso {
     /**
      * Realiza o algoritmo de dfs no sentido normal das arestas.
      * 
-     * @param dependencias <code>Set<Pair<Disciplina, Disciplina>></code> armazena um conjunto de pares de disciplinas.
-     * @param visitados <code>Set<Disciplina></code> armazena todas as disciplinas que já foram visitadas.
+     * @param dependencias conjunto de pares de disciplinas.
+     * @param visitados conjunto de disciplinas que já foram visitadas.
      * @param atual vértice que o algoritmo irá visitar.
      */
     public void dfs(Set<Pair<Disciplina, Disciplina>> dependencias, Set<Disciplina> visitados, Disciplina atual) {
@@ -165,8 +165,8 @@ public class Curso {
     /**
      * Realiza o algoritmo de dfs no sentido inverso das arestas.
      * 
-     * @param dependencias <code>Set<Pair<Disciplina, Disciplina>></code> armazena um conjunto de pares de disciplinas.
-     * @param visitados <code>Set<Disciplina></code> armazena todas as disciplinas que já foram visitadas.
+     * @param dependencias conjunto de pares de disciplinas.
+     * @param visitados conjunto de disciplinas que já foram visitadas.
      * @param atual vértice que o algoritmo irá visitar.
      */
     public void dfsTransp(Set<Pair<Disciplina, Disciplina>> dependencias, Set<Disciplina> visitados, Disciplina atual) {
