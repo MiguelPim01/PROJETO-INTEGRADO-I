@@ -25,9 +25,16 @@ public class CursoControllerTest {
     @Test
     @Order(1)
     public void testUnknownCursoId() throws Exception {
-        mockMvc.perform(get("/curso/123123").contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(get("/curso/123123123123").contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isNotFound())
         .andExpect(jsonPath("$.error").value("Not Found"))
-        .andExpect(jsonPath("$.message").value("Curso não encontrado com id 123123"));
+        .andExpect(jsonPath("$.message").value("Curso não encontrado com id 123123123123"));
+    }
+
+    @Test
+    @Order(1)
+    public void testUnknownDisciplinaId() throws Exception {
+        
+        // Deverá ser feito o POST de um curso, o GET dele, o GET da disciplina inexistente e depois o DELETE do curso.
     }
 }

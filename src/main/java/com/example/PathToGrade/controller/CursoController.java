@@ -80,10 +80,10 @@ public class CursoController {
     }
 
     /**
-     * Retorna um curso a partir de seu id
+     * Retorna um curso a partir de seu id.
      * 
-     * @param id
-     * @return Curso
+     * @param id id do Curso.
+     * @return Curso.
      */
     @GetMapping("/curso/{cursoId}")
     public ResponseEntity<Object> getCursoById(@PathVariable("cursoId") Long id) {
@@ -141,6 +141,28 @@ public class CursoController {
     @PostMapping("/curso/{cursoId}/disciplina")
     public void postDisciplinaInCurso(@PathVariable("cursoId") Long cursoId, @RequestBody Disciplina disciplina) {
         cursoService.saveDisciplinaInCurso(cursoId, disciplina);
+    }
+
+    /**
+     * Retorna uma disciplina de um curso especifico.
+     * 
+     * @param cId id do Curso.
+     * @param dId id da Disciplina.
+     * @return retorna uma ResponseEntity com HttpStatus OK se encontrar e HttpStatus NOT FOUND caso não encontre
+     */
+    @GetMapping("/curso/{cursoId}/disciplina/{disciplinaId}")
+    public ResponseEntity<Object> getDisciplinasByIdFromCurso(@PathVariable("cursoId") Long cId, @PathVariable("disciplinaId") Long dId) {
+        try {
+            Disciplina disciplina = cursoService.getDisciplinaById(cId, dId);
+
+            return ResponseEntity.ok(disciplina);
+        }
+        catch (EntityNotFoundException e) {
+            Map<String, String> erroResponse = new HashMap<>();
+            erroResponse.put("error", "Not Found");
+            erroResponse.put("message", e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(erroResponse);
+        }
     }
 
     /**

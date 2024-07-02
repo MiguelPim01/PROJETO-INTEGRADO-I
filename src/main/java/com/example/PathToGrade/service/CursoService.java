@@ -146,6 +146,25 @@ public class CursoService {
         }
     }
 
+    public Disciplina getDisciplinaById(Long cId, Long dId) {
+        Curso curso = this.getCursoById(dId);
+
+        Disciplina disciplina = null;
+
+        for (Disciplina d : curso.getDisciplinas()) {
+            if (d.getId().equals(dId)) {
+                disciplina = d;
+            }
+        }
+
+        if (disciplina == null) {
+            throw new EntityNotFoundException("Disciplina não encontrada com id " + dId);
+        }
+        else {
+            return disciplina;
+        }
+    }
+
     /**
      * Retorna todas as disiciplinas de um Curso específico.
      * 
