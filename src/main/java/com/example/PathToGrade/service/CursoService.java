@@ -13,6 +13,8 @@ import com.example.PathToGrade.domain.Dependencia;
 import com.example.PathToGrade.domain.Disciplina;
 import com.example.PathToGrade.repository.CursoRepository;
 
+import jakarta.persistence.EntityNotFoundException;
+
 /**
  * <i>Documentação da classe CursoService</i>
  * @author Miguel Vieira Machado Pim
@@ -49,6 +51,19 @@ public class CursoService {
         }
 
         cursoRepository.save(curso);
+    }
+
+    /**
+     * Retorna curso para a classe controller
+     * 
+     * @param id
+     * @return Curso
+     */
+    public Curso getCursoById(Long id) {
+        Curso curso = cursoRepository.findById(id)
+                                .orElseThrow(() -> new EntityNotFoundException("Curso não encontrado com id " + id));
+
+        return curso;
     }
 
     /**

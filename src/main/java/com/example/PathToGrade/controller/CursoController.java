@@ -1,10 +1,14 @@
 package com.example.PathToGrade.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.antlr.v4.runtime.misc.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,6 +21,8 @@ import com.example.PathToGrade.domain.Curso;
 import com.example.PathToGrade.domain.Dependencia;
 import com.example.PathToGrade.domain.Disciplina;
 import com.example.PathToGrade.service.CursoService;
+
+import jakarta.persistence.EntityNotFoundException;
 
 /**
  * <i>Documentação da classe CursoController</i>
@@ -71,6 +77,27 @@ public class CursoController {
     @PostMapping("/curso")
     public void postCurso(@RequestBody Curso curso) {
         cursoService.saveCurso(curso);
+    }
+
+    /**
+     * Retorna um curso a partir de seu id
+     * 
+     * @param id
+     * @return Curso
+     */
+    @GetMapping("/curso/{cursoId}")
+    public ResponseEntity<Object> getCursoById(@PathVariable("cursoId") Long id) {
+        try {
+            Curso curso = cursoService.getCursoById(id);
+
+            return ResponseEntity.ok(curso);
+        }
+        catch (EntityNotFoundException e) {
+            Map<String, String> erroResponse = new HashMap<>();
+            erroResponse.put("error", "Not Found");
+            erroResponse.put("message", e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(erroResponse);
+        }
     }
 
     /**
