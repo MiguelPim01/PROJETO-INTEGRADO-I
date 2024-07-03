@@ -169,8 +169,17 @@ public class CursoController {
      * @return Lista de Disciplinas.
      */
     @GetMapping("/curso/{cursoId}/disciplina")
-    public List<Disciplina> getDisciplinasFromCurso(@PathVariable("cursoId") Long cursoId) {
-        return cursoService.getDisciplinasFromCurso(cursoId);
+    public ResponseEntity<Object> getDisciplinasFromCurso(@PathVariable("cursoId") Long cursoId) {
+        try {
+            return ResponseEntity.ok(cursoService.getDisciplinasFromCurso(cursoId));
+        }
+        catch (EntityNotFoundException e) {
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("error", "Not Found");
+            errorResponse.put("message", e.getMessage());
+
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+        }
     }
 
     /**

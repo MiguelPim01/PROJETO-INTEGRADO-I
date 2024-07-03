@@ -186,17 +186,10 @@ public class CursoService {
      * @return Lista de Disciplinas.
      * @throws RunTimeException
      */
-    public List<Disciplina> getDisciplinasFromCurso(Long cursoId) {
-        Optional<Curso> cursoOp = cursoRepository.findById(cursoId);
+    public List<Disciplina> getDisciplinasFromCurso(Long cursoId) throws EntityNotFoundException {
+        Curso curso = this.getCursoById(cursoId);
 
-        if (cursoOp.isPresent()) {
-            Curso curso = cursoOp.get();
-
-            return curso.getDisciplinas();
-        }
-        else {
-            throw new RuntimeException("Curso não encontrado com id: " + cursoId);
-        }
+        return curso.getDisciplinas();
     }
 
     /**
