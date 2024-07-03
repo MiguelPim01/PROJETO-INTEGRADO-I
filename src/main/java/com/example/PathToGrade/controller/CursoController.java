@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.PathToGrade.domain.Curso;
 import com.example.PathToGrade.domain.Dependencia;
 import com.example.PathToGrade.domain.Disciplina;
+import com.example.PathToGrade.exceptions.CursoNotFoundException;
 import com.example.PathToGrade.exceptions.InvalidCursoException;
 import com.example.PathToGrade.service.CursoService;
 
@@ -127,8 +128,17 @@ public class CursoController {
      * @param cursoId id do Curso.
      */
     @DeleteMapping("/curso/{cursoId}")
-    public void deleteCurso(@PathVariable(name = "cursoId") Long cursoId) {
-        cursoService.deleteCurso(cursoId);
+    public ResponseEntity<Object> deleteCurso(@PathVariable(name = "cursoId") Long cursoId) {
+        try {
+            cursoService.deleteCurso(cursoId);
+            return ResponseEntity.status(HttpStatus.OK).build();
+        }
+        catch (CursoNotFoundException e) {
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("error", "Not Found");
+            errorResponse.put("message", e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+        }
     }
 
     /**

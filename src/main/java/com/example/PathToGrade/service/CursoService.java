@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.example.PathToGrade.domain.Curso;
 import com.example.PathToGrade.domain.Dependencia;
 import com.example.PathToGrade.domain.Disciplina;
+import com.example.PathToGrade.exceptions.CursoNotFoundException;
 import com.example.PathToGrade.exceptions.InvalidCursoException;
 import com.example.PathToGrade.repository.CursoRepository;
 
@@ -105,7 +106,12 @@ public class CursoService {
      * 
      * @param id id do Curso.
      */
-    public void deleteCurso(Long id)  {
+    public void deleteCurso(Long id) throws CursoNotFoundException  {
+        
+        if (!cursoRepository.existsById(id)) {
+            throw new CursoNotFoundException("Curso não encontrado com id " + id);
+        }
+
         cursoRepository.deleteById(id);
     }
 
