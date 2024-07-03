@@ -1,5 +1,6 @@
 package com.example.PathToGrade.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -330,6 +331,24 @@ public class CursoService {
         else {
             throw new RuntimeException("Curso não encontrado com id: " + cId);
         }
+    }
+
+    public List<List<Disciplina>> getPeriodosDoCurso(Long cursoId) throws EntityNotFoundException {
+        List<List<Disciplina>> listaPeriodos = new ArrayList<>();
+
+        Curso curso = this.getCursoById(cursoId);
+
+        for (int i = 0; i < curso.getQtdPeriodos(); i++) {
+            listaPeriodos.add(new ArrayList<>());
+
+            for (Disciplina d : curso.getDisciplinas()) {
+                if (d.getPeriodo() == i+1) {
+                    listaPeriodos.get(i).add(d);
+                }
+            }
+        }
+
+        return listaPeriodos;
     }
 
 }

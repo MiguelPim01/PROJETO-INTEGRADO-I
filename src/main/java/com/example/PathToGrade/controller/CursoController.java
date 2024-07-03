@@ -286,4 +286,18 @@ public class CursoController {
     public Set<Pair<Disciplina, Disciplina>> getPathFromDisciplina(@PathVariable("cursoId") Long cId, @PathVariable("disciplinaId") Long dId) {
         return cursoService.getPathFromDisciplina(cId, dId);
     }
+
+    @GetMapping("curso/{cursoId}/periodos")
+    public ResponseEntity<Object> getPeriodosDoCurso(@PathVariable("cursoId") Long cursoId) {
+        try {
+            return ResponseEntity.ok(cursoService.getPeriodosDoCurso(cursoId));
+        }
+        catch (EntityNotFoundException e) {
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("error", "Not Found");
+            errorResponse.put("message", e.getMessage());
+
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+        }
+    }
 }
