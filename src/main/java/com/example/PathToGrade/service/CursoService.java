@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.example.PathToGrade.domain.Curso;
 import com.example.PathToGrade.domain.Dependencia;
 import com.example.PathToGrade.domain.Disciplina;
+import com.example.PathToGrade.exceptions.InvalidCursoException;
 import com.example.PathToGrade.repository.CursoRepository;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -35,22 +36,23 @@ public class CursoService {
      * Salva um Curso no repositório.
      * 
      * @param curso Curso a ser salvo.
-     * @throws RunTimeException
+     * @throws InvalidCursoException Se o curso já existir ou os seus parametros não forem válidos essa exceção será lançada.
      */
-    public void saveCurso(Curso curso) {
-        if (curso.getNome() == null || !(curso.getQtdPeriodos() > 0 && curso.getQtdPeriodos() <= 12)) {
-            throw new RuntimeException("Error: Curso Inválido!");
-        }
-
+    public Long saveCurso(Curso curso) throws InvalidCursoException {
         Iterable<Curso> cursos = cursoRepository.findAll();
 
         for (Curso c : cursos) {
             if (c.getNome().equals(curso.getNome()) && c.getQtdPeriodos() == curso.getQtdPeriodos()) {
-                throw new RuntimeException("Error: Curso já existe!");
+                throw new InvalidCursoException("Curso já existe");
             }
+        }
+        if (curso.getNome() == null || !(curso.getQtdPeriodos() > 0 && curso.getQtdPeriodos() <= 12)) {
+            throw new InvalidCursoException("Curso Inválido");
         }
 
         cursoRepository.save(curso);
+
+        return cursoRepository.findByNome(curso.getNome()).get().getId();
     }
 
     /**
@@ -146,7 +148,7 @@ public class CursoService {
         }
     }
 
-    public Disciplina getDisciplinaById(Long cId, Long dId) {
+    public Disciplina getDisciplinaById(Long cId, Long dId) throws EntityNotFoundException {
         Curso curso = this.getCursoById(dId);
 
         Disciplina disciplina = null;
