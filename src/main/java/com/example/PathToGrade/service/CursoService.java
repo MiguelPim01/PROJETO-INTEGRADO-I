@@ -37,7 +37,8 @@ public class CursoService {
      * Salva um Curso no repositório.
      * 
      * @param curso Curso a ser salvo.
-     * @throws InvalidCursoException Se o curso já existir ou os seus parametros não forem válidos essa exceção será lançada.
+     * @return id do curso salvo
+     * @throws InvalidCursoException
      */
     public Long saveCurso(Curso curso) throws InvalidCursoException {
         Iterable<Curso> cursos = cursoRepository.findAll();
@@ -59,10 +60,11 @@ public class CursoService {
     /**
      * Retorna curso para a classe controller
      * 
-     * @param id
+     * @param id id do curso.
      * @return Curso
+     * @throws EntityNotFoundException
      */
-    public Curso getCursoById(Long id) {
+    public Curso getCursoById(Long id) throws EntityNotFoundException {
         Curso curso = cursoRepository.findById(id)
                                 .orElseThrow(() -> new EntityNotFoundException("Curso não encontrado com id " + id));
 
@@ -154,6 +156,14 @@ public class CursoService {
         }
     }
 
+    /**
+     * Método para retornar uma Disciplina dado o seu id.
+     * 
+     * @param cId id do curso.
+     * @param dId id da disciplina.
+     * @return Disciplina
+     * @throws EntityNotFoundException
+     */
     public Disciplina getDisciplinaById(Long cId, Long dId) throws EntityNotFoundException {
         Curso curso = this.getCursoById(cId);
 
