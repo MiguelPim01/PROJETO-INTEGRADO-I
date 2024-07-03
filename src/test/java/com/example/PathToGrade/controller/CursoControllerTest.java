@@ -8,8 +8,11 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
+
 import org.junit.jupiter.api.Order;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
@@ -32,9 +35,23 @@ public class CursoControllerTest {
     }
 
     @Test
-    @Order(1)
+    @Order(2)
     public void testUnknownDisciplinaId() throws Exception {
-        
-        // Deverá ser feito o POST de um curso, o GET dele, o GET da disciplina inexistente e depois o DELETE do curso.
+        String cursoContent = "{\"nome\":\"Curso Teste\", \"qtdPeriodos\":10}";
+
+        ResultActions result = mockMvc.perform(post("/curso").contentType(MediaType.APPLICATION_JSON)
+        .content(cursoContent))
+        .andExpect(status().isCreated());
+
+        String responseString = result.andReturn().getResponse().getContentAsString();
+
+        Long id = Long.valueOf(responseString);
+
+        String url = "/curso/" + id + "/disciplina/123123123123";
+
+        mockMvc.perform(get(url).contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isNotFound())
+        .andExpect(jsonPath("$.error").value("Not Found"))
+        .andExpect(jsonPath("$.message").value("Disciplina não encontrada com id 123123123123"));
     }
 }
