@@ -80,12 +80,14 @@ public class CursoController {
     public ResponseEntity<Object> postCurso(@RequestBody Curso curso) {
         try {
             Long id = cursoService.saveCurso(curso);
+
             return ResponseEntity.status(HttpStatus.CREATED).body(id);
         }
         catch (InvalidCursoException e) {
             Map<String, String> errorResponse = new HashMap<>();
             errorResponse.put("error", "Invalid Curso");
             errorResponse.put("message", e.getMessage());
+
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
         }
     }
@@ -107,6 +109,7 @@ public class CursoController {
             Map<String, String> errorResponse = new HashMap<>();
             errorResponse.put("error", "Not Found");
             errorResponse.put("message", e.getMessage());
+
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
         }
     }
@@ -137,6 +140,7 @@ public class CursoController {
             Map<String, String> errorResponse = new HashMap<>();
             errorResponse.put("error", "Not Found");
             errorResponse.put("message", e.getMessage());
+
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
         }
     }
@@ -181,6 +185,7 @@ public class CursoController {
             Map<String, String> erroResponse = new HashMap<>();
             erroResponse.put("error", "Not Found");
             erroResponse.put("message", e.getMessage());
+            
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(erroResponse);
         }
     }
