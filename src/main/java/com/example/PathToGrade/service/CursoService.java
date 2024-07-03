@@ -155,7 +155,7 @@ public class CursoService {
     }
 
     public Disciplina getDisciplinaById(Long cId, Long dId) throws EntityNotFoundException {
-        Curso curso = this.getCursoById(dId);
+        Curso curso = this.getCursoById(cId);
 
         Disciplina disciplina = null;
 
