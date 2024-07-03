@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import com.example.PathToGrade.domain.Curso;
 import com.example.PathToGrade.domain.Dependencia;
 import com.example.PathToGrade.domain.Disciplina;
-import com.example.PathToGrade.exceptions.CursoNotFoundException;
 import com.example.PathToGrade.exceptions.InvalidCursoException;
 import com.example.PathToGrade.repository.CursoRepository;
 
@@ -87,20 +86,17 @@ public class CursoService {
      * @param curso novo Curso contendo as informações a serem modificadas.
      * @throws RunTimeException
      */
-    public void modifyCurso(Long cursoId, Curso curso) {
-        Optional<Curso> cursoOp = cursoRepository.findById(cursoId);
+    public void modifyCurso(Long cursoId, Curso curso) throws EntityNotFoundException, InvalidCursoException {
+        Curso c = this.getCursoById(cursoId);
 
-        if (cursoOp.isPresent()) {
-            Curso c = cursoOp.get();
-
-            c.setNome(curso.getNome());
-            c.setQtdPeriodos(curso.getQtdPeriodos());
-
-            cursoRepository.save(c);
+        if (curso.getNome() == null || !(curso.getQtdPeriodos() > 0 && curso.getQtdPeriodos() <= 12)) {
+            throw new InvalidCursoException("Curso Inválido");
         }
-        else {
-            throw new RuntimeException("Curso não encontrado com id: " + cursoId);
-        }
+
+        c.setNome(curso.getNome());
+        c.setQtdPeriodos(curso.getQtdPeriodos());
+
+        cursoRepository.save(c);
     }
 
     /**
@@ -108,10 +104,10 @@ public class CursoService {
      * 
      * @param id id do Curso.
      */
-    public void deleteCurso(Long id) throws CursoNotFoundException  {
+    public void deleteCurso(Long id) throws EntityNotFoundException  {
         
         if (!cursoRepository.existsById(id)) {
-            throw new CursoNotFoundException("Curso não encontrado com id " + id);
+            throw new EntityNotFoundException("Curso não encontrado com id " + id);
         }
 
         cursoRepository.deleteById(id);

@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.PathToGrade.domain.Curso;
 import com.example.PathToGrade.domain.Dependencia;
 import com.example.PathToGrade.domain.Disciplina;
-import com.example.PathToGrade.exceptions.CursoNotFoundException;
 import com.example.PathToGrade.exceptions.InvalidCursoException;
 import com.example.PathToGrade.service.CursoService;
 
@@ -67,8 +66,8 @@ public class CursoController {
      * @return Lista de Cursos.
      */
     @GetMapping("/curso")
-    public Iterable<Curso> getCursos() {
-        return cursoService.getCursos();
+    public ResponseEntity<Iterable<Curso>> getCursos() {
+        return ResponseEntity.ok(cursoService.getCursos());
     }
 
     /**
@@ -88,7 +87,7 @@ public class CursoController {
             errorResponse.put("error", "Invalid Curso");
             errorResponse.put("message", e.getMessage());
 
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
         }
     }
 
@@ -121,8 +120,26 @@ public class CursoController {
      * @param curso novo Curso contendo as informações a serem modificadas.
      */
     @PutMapping("/curso/{cursoId}")
-    public void putCurso(@PathVariable("cursoId") Long cursoId, @RequestBody Curso curso) {
-        cursoService.modifyCurso(cursoId, curso);
+    public ResponseEntity<Object> putCurso(@PathVariable("cursoId") Long cursoId, @RequestBody Curso curso) {
+        try {
+            cursoService.modifyCurso(cursoId, curso);
+
+            return ResponseEntity.status(HttpStatus.OK).build();
+        }
+        catch (EntityNotFoundException e) {
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("error", "Not Found");
+            errorResponse.put("message", e.getMessage());
+
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+        }
+        catch (InvalidCursoException e) {
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("error", "Bad Request");
+            errorResponse.put("message", e.getMessage());
+
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+        }
     }
 
     /**
@@ -136,7 +153,7 @@ public class CursoController {
             cursoService.deleteCurso(cursoId);
             return ResponseEntity.status(HttpStatus.OK).build();
         }
-        catch (CursoNotFoundException e) {
+        catch (EntityNotFoundException e) {
             Map<String, String> errorResponse = new HashMap<>();
             errorResponse.put("error", "Not Found");
             errorResponse.put("message", e.getMessage());
