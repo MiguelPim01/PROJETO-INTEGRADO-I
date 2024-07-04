@@ -1,0 +1,177 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap');
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: bold;
+}
+
+html,body{
+    height: 100%;
+}
+
+:root {
+    --azul-claro: #A8D0DB;
+    --verde-petroleo: #02394A; 
+    --branco: #F5F5F5;
+    --verde-escuro: #537A5A;
+    --verde-claro: #A1E887;
+}
+
+div.main-container{
+    display: flex;
+    height: 100vh;
+}
+
+nav {
+    width: 15vw;
+    height: 100vh;
+    background-color: var(--verde-petroleo);
+    color: var(--branco);
+}
+
+div.logo {
+    width: 100%;
+    height: 15vh;
+    margin-bottom: 20px;
+    background-image: url(../images/logo.png);
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+}
+
+nav div.dropdown{
+    width: 80%;
+    margin-left: 10%;
+    margin-right: 10%;
+    margin-bottom: 20px;
+}
+
+nav div.dropdown-title {
+    display: flex; /* Define o contêiner para usar flexbox */
+    align-items: center; /* Alinha os itens verticalmente no centro */
+    justify-content: start; /* Alinha o conteúdo à esquerda (opcional) */
+    border-radius: 8px;
+    border: 1px solid var(--branco);
+    padding-left: 15px;
+    height: 48px;
+}
+
+nav div.dropdown-title span{
+    color: var(--branco);
+    font-size: 24px;
+    font-weight: bold;
+}
+
+nav #dropdown-content li{
+    list-style: none;
+    padding: 15px;
+    border-bottom: 1px solid var(--branco);
+    font-size: 18px;
+    cursor: pointer;
+}
+
+nav #dropdown-content li:hover{
+    list-style: none;
+    padding: 15px;
+    color: var(--verde-claro);
+    border-bottom: 1px solid var(--verde-claro);
+}
+
+nav footer{
+    position: absolute;
+    bottom: 0;
+    width: inherit;
+    height: 10vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+nav footer div.github-redirect:hover{
+    cursor: pointer;
+}
+
+nav footer div.github-mark{
+    width: 48px;
+    height: 48px;
+    background-image: url(../images/github-mark-white.svg);
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    cursor: pointer;
+}
+
+nav footer div.github-logo{
+    width: 50%;
+    height: 48px;
+    background-image: url(../images/GitHub_Logo_White.png);
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    cursor: pointer;
+}
+
+section.paths {
+    height: 100vh;
+    background-color: var(--branco);
+    display: flex; /* Define o contêiner para usar flexbox */
+    align-items: center; /* Alinha os itens verticalmente no centro */
+    justify-content: center; /* Alinha o conteúdo à esquerda (opcional) */
+    overflow-x: scroll;
+    padding: 32px;
+    min-width: 85vw;
+    scroll-behavior: smooth;
+}
+
+section.paths div.info span{
+    font-size: 24px;
+    font-weight: bold;
+    color: var(--azul-claro);
+}
+
+section.paths ul{
+    list-style: none;
+    font-size: 18px;
+    display: flex;
+    flex-direction: column;
+    margin-right: 30px;
+    text-align: center;
+}
+
+section.paths ul li{
+    width: 10vw;
+    height: 10vh;
+    margin: 10px;
+    border-radius: 12px;
+    background-color: var(--verde-escuro);
+    color: var(--branco);
+    cursor: pointer;
+    
+    display: flex; /* Usa Flexbox */
+    justify-content: center; /* Espaça os itens igualmente */
+    align-items: center;
+    padding: 8px; /* Espaçamento interno */
+}
+
+section.paths ul li.periodo{
+    font-size: 24px;
+    height: 6vh;
+    background-color: var(--verde-petroleo);
+}
+
+section.paths::-webkit-scrollbar {
+    width: 24px;
+}
+
+section.paths::-webkit-scrollbar-thumb {
+    background-color: var(--verde-escuro);
+    border-radius: 12px;
+    border: #F5F5F5 solid 4px;
+}
+
+section.paths::-webkit-scrollbar-track {
+    background-color: var(--branco);
+}

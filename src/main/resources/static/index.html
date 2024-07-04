@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <link rel="icon" href="images/favicon.png" type="image/png">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/actions.js"></script>
+    <title>PathToGrade</title>
+</head>
+<body>
+    <div class="main-container">
+        <nav>
+            <div class="logo"></div>
+
+            <div class="dropdown">
+                <div class="dropdown-title">
+                    <span>Cursos</span>
+                </div>
+
+                <div id="dropdown-content"><li>Ciência da Computação</li><li>Engenharia da Computação</li></div>
+            </div>
+            
+            <footer>
+                <div class="github-mark" onclick="window.open('https://github.com/MiguelPim01/PROJETO-INTEGRADO-I', '_blank');"></div>
+                <div class="github-logo" onclick="window.open('https://github.com/MiguelPim01/PROJETO-INTEGRADO-I', '_blank');"></div>
+            </footer>
+        </nav>
+
+        <section id="paths" class="paths">
+            <div class="info">
+                <span>Clique no nome do curso que deseja navegar</span>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        listaCursos()
+        scrollPaths()
+    </script>
+</body>
+</html>
