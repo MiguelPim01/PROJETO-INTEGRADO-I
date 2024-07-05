@@ -14,6 +14,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.junit.jupiter.api.Order;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -55,6 +56,21 @@ public class CursoControllerTest {
 
     @Test
     @Order(3)
+    public void testPutCurso() throws Exception {
+        String cursoContent = "{\"nome\":\"Curso Mudado\", \"qtdPeriodos\":12}";
+        String url = "/curso/" + id;
+
+        mockMvc.perform(put(url).contentType(MediaType.APPLICATION_JSON).content(cursoContent))
+        .andExpect(status().isOk());
+
+        mockMvc.perform(get(url).contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.nome").value("Curso Mudado"))
+        .andExpect(jsonPath("$.qtdPeriodos").value(12));
+    }
+
+    @Test
+    @Order(3)
     public void testUnknownDisciplinaId() throws Exception {
         String url = "/curso/" + id + "/disciplina/123123123123";
 
@@ -67,14 +83,12 @@ public class CursoControllerTest {
     @Test
     @Order(4)
     public void testDeleteCurso() throws Exception {
-        String urlDelete = "/curso/" + id;
+        String url = "/curso/" + id;
 
-        mockMvc.perform(delete(urlDelete).contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(delete(url).contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk());
 
-        String urlGet = "/curso/" + id;
-
-        mockMvc.perform(get(urlGet).contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(get(url).contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isNotFound());
     }
 }
