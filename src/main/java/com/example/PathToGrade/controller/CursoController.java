@@ -3,9 +3,7 @@ package com.example.PathToGrade.controller;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
-import org.antlr.v4.runtime.misc.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -386,8 +384,17 @@ public class CursoController {
      * @return conjunto de pares de disciplinas. Indicam todos os caminhos pelos quais os dfs's andaram.
      */
     @GetMapping("curso/{cursoId}/path/{disciplinaId}")
-    public Set<Pair<Disciplina, Disciplina>> getPathFromDisciplina(@PathVariable("cursoId") Long cId, @PathVariable("disciplinaId") Long dId) {
-        return cursoService.getPathFromDisciplina(cId, dId);
+    public ResponseEntity<Object> getPathFromDisciplina(@PathVariable("cursoId") Long cId, @PathVariable("disciplinaId") Long dId) {
+        try {
+            return ResponseEntity.ok(cursoService.getPathFromDisciplina(cId, dId));
+        }
+        catch (EntityNotFoundException e) {
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("error", "Not Found");
+            errorResponse.put("message", e.getMessage());
+
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+        }
     }
 
     @GetMapping("curso/{cursoId}/periodos")

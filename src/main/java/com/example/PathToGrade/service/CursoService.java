@@ -2,7 +2,6 @@ package com.example.PathToGrade.service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 import org.antlr.v4.runtime.misc.Pair;
@@ -307,19 +306,13 @@ public class CursoService {
      * @param cId id do Curso.
      * @param dId id da Disciplina.
      * @return conjunto de pares de disciplinas. Indicam todos os caminhos pelos quais os dfs's andaram.
-     * @throws RunTimeException
+     * @throws EntityNotFoundException
      */
-    public Set<Pair<Disciplina, Disciplina>> getPathFromDisciplina(Long cId, Long dId) {
-        Optional<Curso> cursoOp = cursoRepository.findById(cId);
+    public Set<Pair<Disciplina, Disciplina>> getPathFromDisciplina(Long cId, Long dId) throws EntityNotFoundException {
+        Curso curso = this.getCursoById(cId);
 
-        if (cursoOp.isPresent()) {
-            Curso curso = cursoOp.get();
-
-            return curso.findPathToDisciplina(dId);
-        }
-        else {
-            throw new RuntimeException("Curso não encontrado com id: " + cId);
-        }
+        return curso.findPathToDisciplina(dId);
+        
     }
 
     public List<List<Disciplina>> getPeriodosDoCurso(Long cursoId) throws EntityNotFoundException {
