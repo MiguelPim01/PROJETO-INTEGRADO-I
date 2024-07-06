@@ -26,6 +26,7 @@ div.main-container{
 }
 
 nav {
+    min-width: 15vw;
     width: 15vw;
     height: 100vh;
     background-color: var(--verde-petroleo);
@@ -73,12 +74,14 @@ nav #dropdown-content li{
     cursor: pointer;
 }
 
+/*
 nav #dropdown-content li:hover{
     list-style: none;
     padding: 15px;
     color: var(--verde-claro);
     border-bottom: 1px solid var(--verde-claro);
 }
+*/
 
 nav footer{
     position: absolute;
@@ -124,6 +127,8 @@ section.paths {
     padding: 32px;
     min-width: 85vw;
     scroll-behavior: smooth;
+
+    position: relative;
 }
 
 section.paths div.info span{
@@ -160,6 +165,7 @@ section.paths ul li.periodo{
     font-size: 24px;
     height: 6vh;
     background-color: var(--verde-petroleo);
+    cursor: default;
 }
 
 section.paths::-webkit-scrollbar {
