@@ -140,7 +140,7 @@ function trocaCSSDisciplinasPadrao(){
 function trocaCSSDisciplinasOpacidade(){
     const disciplinas = document.getElementsByClassName('disciplina');
     Array.from(disciplinas).forEach(disciplina => {
-        if(!(disciplina.classList.contains('disciplinaClicada') || window.getComputedStyle(disciplina).getPropertyValue('background-color') == 'rgb(161, 232, 135)')){
+        if(!(disciplina.classList.contains('disciplinaClicada') || disciplina.classList.contains('disciplinaPathing'))){
             disciplina.style.opacity = '0.4';
             disciplina.style.border = 'none';
             disciplina.style.color = '#F5F5F5';
@@ -149,16 +149,18 @@ function trocaCSSDisciplinasOpacidade(){
     });
 }
 
-function trocaCSSDisciplinaPathing(disciplinaId){
-    const disciplina = document.getElementById(disciplinaId);
-    disciplina.style.opacity = '1';
-    disciplina.style.backgroundColor = '#A1E887';
-    disciplina.style.border = '4px solid #537A5A';
-    disciplina.style.color = '#537A5A';
+function trocaCSSDisciplinaPathing(){
+    const disciplina = document.getElementsByClassName('disciplinaPathing');
+    Array.from(disciplina).forEach(disciplina => {
+        disciplina.style.opacity = '1';
+        disciplina.style.backgroundColor = '#A1E887';
+        disciplina.style.border = '4px solid #537A5A';
+        disciplina.style.color = '#537A5A';
+    });
 }
 
-function trocaCSSDisciplinaClicada(disciplinaId){
-    const disciplina = document.getElementById(disciplinaId);
+function trocaCSSDisciplinaClicada(){
+    const disciplina = document.getElementsByClassName('disciplinaClicada')[0];
     disciplina.style.opacity = '1';
     disciplina.style.backgroundColor = '#F5F5F5';
     disciplina.style.border = '4px solid #537A5A';
@@ -220,18 +222,6 @@ function pathing(disciplinaId, cursoId){
         criaButtonClose();
     }
 
-    axios.get(`curso/${cursoId}/path/${disciplinaId}`)
-    .then(response => {
-        response.data.forEach(item => {
-            trocaCSSDisciplinaPathing(item.a.id);
-            trocaCSSDisciplinaPathing(item.b.id);
-        });
-
-        trocaCSSDisciplinaClicada(disciplinaId);
-    })
-
-    trocaCSSDisciplinasOpacidade();
-
     if(document.getElementById('svg')){
         document.getElementById('svg').remove();
     }
@@ -241,12 +231,28 @@ function pathing(disciplinaId, cursoId){
     axios.get(`curso/${cursoId}/path/${disciplinaId}`)
     .then(response => {
         response.data.forEach(item => {
+            const itemA = document.getElementById(item.a.id);
+            const itemB = document.getElementById(item.b.id);
+
+            itemA.classList.add('disciplinaPathing');
+            itemB.classList.add('disciplinaPathing');
+
             criaLinha(item.a.id, item.b.id);
         });
+
+        trocaCSSDisciplinaPathing();
+        trocaCSSDisciplinasOpacidade();
+
+        response.data.forEach(item => {
+            const itemA = document.getElementById(item.a.id);
+            const itemB = document.getElementById(item.b.id);
+
+            itemA.classList.remove('disciplinaPathing');
+            itemB.classList.remove('disciplinaPathing');
+        });
+
+        trocaCSSDisciplinaClicada();
     })
-    .catch(error => {
-        console.error(error);
-    });
 }
 
 function trocaCSSPaths(dataDisplay){
