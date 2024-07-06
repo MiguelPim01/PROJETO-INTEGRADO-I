@@ -13,6 +13,7 @@ import com.example.PathToGrade.domain.Curso;
 import com.example.PathToGrade.domain.Dependencia;
 import com.example.PathToGrade.domain.Disciplina;
 import com.example.PathToGrade.exceptions.InvalidCursoException;
+import com.example.PathToGrade.exceptions.InvalidDisciplinaException;
 import com.example.PathToGrade.repository.CursoRepository;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -119,38 +120,33 @@ public class CursoService {
      * 
      * @param cursoId id do Curso.
      * @param disciplina Disciplina a ser inserida.
-     * @throws RunTimeException
+     * @throws InvalidDisciplinaException
+     * @throws EntityNotFoundException
      */
-    public void saveDisciplinaInCurso(Long cursoId, Disciplina disciplina) {
-        Optional<Curso> cursoOp = cursoRepository.findById(cursoId);
+    public void saveDisciplinaInCurso(Long cursoId, Disciplina disciplina) throws InvalidDisciplinaException, EntityNotFoundException {
+        Curso curso = this.getCursoById(cursoId);
 
-        if (cursoOp.isPresent()) {
-            Curso curso = cursoOp.get();
-
-            // Verifica se a disciplina é invalida
-            if (disciplina.getCodigo() == null || 
+        // Verifica se a disciplina é invalida
+        if (disciplina.getCodigo() == null || 
             disciplina.getNome() == null || 
-            !(disciplina.getPeriodo() > 0 && disciplina.getPeriodo() <= curso.getQtdPeriodos()) ||
+            !(disciplina.getPeriodo() >= 2 && disciplina.getPeriodo() <= curso.getQtdPeriodos()) ||
             disciplina.getCargaHoraria() == null) {
-                throw new RuntimeException("Error: Disciplina Inválida!");
-            }
 
-            // Verifica se a disciplina ja existe no curso
-            for (Disciplina d : curso.getDisciplinas()) {
-                if (d.getCodigo().equals(disciplina.getCodigo())) {
-                    throw new RuntimeException("Error: Disciplina já existe!");
-                }
-            }
-
-            // Faz a relação entre a Disciplina e o Curso
-            curso.addDisciplina(disciplina);
-
-            // Leva essa informação para o banco de dados
-            cursoRepository.save(curso);
+            throw new InvalidDisciplinaException("Disciplina Inválida!");
         }
-        else {
-            throw new RuntimeException("Curso não encontrado com id: " + cursoId);
+
+        // Verifica se a disciplina ja existe no curso
+        for (Disciplina d : curso.getDisciplinas()) {
+            if (d.getCodigo().equals(disciplina.getCodigo())) {
+                throw new InvalidDisciplinaException("Disciplina já existe!");
+            }
         }
+
+        // Faz a relação entre a Disciplina e o Curso
+        curso.addDisciplina(disciplina);
+
+        // Leva essa informação para o banco de dados
+        cursoRepository.save(curso);
     }
 
     /**
@@ -268,8 +264,9 @@ public class CursoService {
      * 
      * @param cursoId id do Curso.
      * @param disciplinas lista de Disciplinas a serem inseridas.
+     * @throws InvalidDisciplinaException
      */
-    public void saveDisciplinaListInCurso(Long cursoId, List<Disciplina> disciplinas) {
+    public void saveDisciplinaListInCurso(Long cursoId, List<Disciplina> disciplinas) throws InvalidDisciplinaException {
         
         for (Disciplina d : disciplinas) {
             this.saveDisciplinaInCurso(cursoId, d);    

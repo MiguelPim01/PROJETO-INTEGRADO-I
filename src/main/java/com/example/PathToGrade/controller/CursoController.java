@@ -21,6 +21,7 @@ import com.example.PathToGrade.domain.Curso;
 import com.example.PathToGrade.domain.Dependencia;
 import com.example.PathToGrade.domain.Disciplina;
 import com.example.PathToGrade.exceptions.InvalidCursoException;
+import com.example.PathToGrade.exceptions.InvalidDisciplinaException;
 import com.example.PathToGrade.service.CursoService;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -189,8 +190,26 @@ public class CursoController {
      * @param disciplina Disciplina a ser inserida.
      */
     @PostMapping("/curso/{cursoId}/disciplina")
-    public void postDisciplinaInCurso(@PathVariable("cursoId") Long cursoId, @RequestBody Disciplina disciplina) {
-        cursoService.saveDisciplinaInCurso(cursoId, disciplina);
+    public ResponseEntity<Object> postDisciplinaInCurso(@PathVariable("cursoId") Long cursoId, @RequestBody Disciplina disciplina) {
+        try {
+            cursoService.saveDisciplinaInCurso(cursoId, disciplina);
+
+            return ResponseEntity.status(HttpStatus.OK).build();
+        }
+        catch (InvalidDisciplinaException e) {
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("error", "Bad Request");
+            errorResponse.put("message", e.getMessage());
+
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+        }
+        catch (EntityNotFoundException e) {
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("error", "Not Found");
+            errorResponse.put("message", e.getMessage());
+
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+        }
     }
 
     /**
@@ -247,8 +266,26 @@ public class CursoController {
      * @param disciplinas lista de Disciplinas a ser inserida.
      */
     @PostMapping("/curso/{cursoId}/disciplinas")
-    public void postDisciplinaListInCurso(@PathVariable("cursoId") Long cursoId, @RequestBody List<Disciplina> disciplinas) {
-        cursoService.saveDisciplinaListInCurso(cursoId, disciplinas);
+    public ResponseEntity<Object> postDisciplinaListInCurso(@PathVariable("cursoId") Long cursoId, @RequestBody List<Disciplina> disciplinas) {
+        try {
+            cursoService.saveDisciplinaListInCurso(cursoId, disciplinas);
+
+            return ResponseEntity.status(HttpStatus.OK).build();
+        }
+        catch (InvalidDisciplinaException e) {
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("error", "Bad Request");
+            errorResponse.put("message", e.getMessage());
+
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+        }
+        catch (EntityNotFoundException e) {
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("error", "Not Found");
+            errorResponse.put("message", e.getMessage());
+
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+        }
     }
 
     /**
