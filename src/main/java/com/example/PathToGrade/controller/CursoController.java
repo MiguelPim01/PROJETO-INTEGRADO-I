@@ -21,6 +21,7 @@ import com.example.PathToGrade.domain.Curso;
 import com.example.PathToGrade.domain.Dependencia;
 import com.example.PathToGrade.domain.Disciplina;
 import com.example.PathToGrade.exceptions.InvalidCursoException;
+import com.example.PathToGrade.exceptions.InvalidDependenciaException;
 import com.example.PathToGrade.exceptions.InvalidDisciplinaException;
 import com.example.PathToGrade.service.CursoService;
 
@@ -324,8 +325,26 @@ public class CursoController {
      * @param dependencia indica qual Disciplina é pré-requisito da outra.
      */
     @PostMapping("/curso/{cursoId}/preRequisito")
-    public void postDependencia(@PathVariable("cursoId") Long cursoId, @RequestBody Dependencia dependencia) {
-        cursoService.addDependencia(cursoId, dependencia.getDisciplinaA(), dependencia.getDisciplinaB());
+    public ResponseEntity<Object> postDependencia(@PathVariable("cursoId") Long cursoId, @RequestBody Dependencia dependencia) {
+        try {
+            cursoService.addDependencia(cursoId, dependencia.getDisciplinaA(), dependencia.getDisciplinaB());
+
+            return ResponseEntity.status(HttpStatus.OK).build();
+        }
+        catch (EntityNotFoundException e) {
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("error", "Not Found");
+            errorResponse.put("message", e.getMessage());
+
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+        }
+        catch (InvalidDependenciaException e) {
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("error", "Bad Request");
+            errorResponse.put("message", e.getMessage());
+
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+        }
     }
 
     /**
@@ -336,8 +355,26 @@ public class CursoController {
      * @param dependencias lista de dependencias.
      */
     @PostMapping("curso/{cursoId}/preRequisitos")
-    public void postDependenciaListInCurso(@PathVariable("cursoId") Long cursoId, @RequestBody List<Dependencia> dependencias) {
-        cursoService.addDependenciaListInCurso(cursoId, dependencias);
+    public ResponseEntity<Object> postDependenciaListInCurso(@PathVariable("cursoId") Long cursoId, @RequestBody List<Dependencia> dependencias) {
+        try {
+            cursoService.addDependenciaListInCurso(cursoId, dependencias);
+
+            return ResponseEntity.status(HttpStatus.OK).build();
+        }
+        catch (EntityNotFoundException e) {
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("error", "Not Found");
+            errorResponse.put("message", e.getMessage());
+
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+        }
+        catch (InvalidDependenciaException e) {
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("error", "Bad Request");
+            errorResponse.put("message", e.getMessage());
+
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+        }
     }
 
     /**

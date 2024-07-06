@@ -13,6 +13,7 @@ import com.example.PathToGrade.domain.Curso;
 import com.example.PathToGrade.domain.Dependencia;
 import com.example.PathToGrade.domain.Disciplina;
 import com.example.PathToGrade.exceptions.InvalidCursoException;
+import com.example.PathToGrade.exceptions.InvalidDependenciaException;
 import com.example.PathToGrade.exceptions.InvalidDisciplinaException;
 import com.example.PathToGrade.repository.CursoRepository;
 
@@ -255,8 +256,9 @@ public class CursoService {
      * @param cursoId id do Curso.
      * @param disciplinas lista de Disciplinas a serem inseridas.
      * @throws InvalidDisciplinaException
+     * @throws EntityNotFoundException
      */
-    public void saveDisciplinaListInCurso(Long cursoId, List<Disciplina> disciplinas) throws InvalidDisciplinaException {
+    public void saveDisciplinaListInCurso(Long cursoId, List<Disciplina> disciplinas) throws InvalidDisciplinaException, EntityNotFoundException {
         
         for (Disciplina d : disciplinas) {
             this.saveDisciplinaInCurso(cursoId, d);    
@@ -269,21 +271,19 @@ public class CursoService {
      * @param cursoId id do Curso.
      * @param disciplinaA código do pré-requisito.
      * @param disciplinaB código da Disciplina.
-     * @throws RunTimeException
+     * @throws EntityNotFoundException
+     * @throws InvalidDependenciaException
      */
-    public void addDependencia(Long cursoId, String disciplinaA, String disciplinaB) {
-        Optional<Curso> cursoOp = cursoRepository.findById(cursoId);
+    public void addDependencia(Long cursoId, String disciplinaA, String disciplinaB) throws EntityNotFoundException, InvalidDependenciaException {
+        Curso curso = this.getCursoById(cursoId);
 
-        if (cursoOp.isPresent()) {
-            Curso curso = cursoOp.get();
-
-            curso.addPreRequisito(disciplinaA, disciplinaB);
-
-            cursoRepository.save(curso);
+        if (disciplinaA == null || disciplinaB == null) {
+            throw new InvalidDependenciaException("Dependencia Inválida");
         }
-        else {
-            throw new RuntimeException("Curso não encontrado com id: " + cursoId);
-        }
+
+        curso.addPreRequisito(disciplinaA, disciplinaB);
+
+        cursoRepository.save(curso);
     }
 
     /**
@@ -291,8 +291,10 @@ public class CursoService {
      * 
      * @param cursoId id do Curso.
      * @param dependencias lista de Dependencias.
+     * @throws InvalidDependenciaException
+     * @throws EntityNotFoundException
      */
-    public void addDependenciaListInCurso(Long cursoId, List<Dependencia> dependencias) {
+    public void addDependenciaListInCurso(Long cursoId, List<Dependencia> dependencias) throws InvalidDependenciaException, EntityNotFoundException {
         for (Dependencia d : dependencias) {
             this.addDependencia(cursoId, d.getDisciplinaA(), d.getDisciplinaB());
         }
