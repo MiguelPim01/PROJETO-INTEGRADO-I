@@ -195,34 +195,29 @@ public class CursoService {
      * @param cursoId id do Curso.
      * @param disciplinaId id da Disciplina.
      * @param disciplina nova Disciplina contendo as informações a serem modificadas.
-     * @throws RunTimeException
+     * @throws InvalidDisciplinaException
+     * @throws EntityNotFoundException
      */
-    public void modifyDisciplinaFromCurso(Long cursoId, Long disciplinaId, Disciplina disciplina) {
-        Optional<Curso> cursoOp = cursoRepository.findById(cursoId);
+    public void modifyDisciplinaFromCurso(Long cursoId, Long disciplinaId, Disciplina disciplina) throws InvalidDisciplinaException, EntityNotFoundException {
+        Curso curso = this.getCursoById(cursoId);
 
-        if (cursoOp.isPresent()) {
-            Curso curso = cursoOp.get();
-
-            // Verifica se a disciplina é invalida
-            if (disciplina.getCodigo() == null || 
+        // Verifica se a disciplina é invalida
+        if (disciplina.getCodigo() == null || 
             disciplina.getNome() == null || 
             !(disciplina.getPeriodo() > 0 && disciplina.getPeriodo() <= curso.getQtdPeriodos()) ||
             disciplina.getCargaHoraria() == null) {
-                throw new RuntimeException("Error: Disciplina Inválida!");
-            }
 
-            for (Disciplina d : curso.getDisciplinas()) {
-                if (d.getId().equals(disciplinaId)) {
-                    d.modifyDisciplina(disciplina);
-                    break;
-                }
-            }
+            throw new InvalidDisciplinaException("Error: Disciplina Inválida!");
+        }
 
-            cursoRepository.save(curso);
+        for (Disciplina d : curso.getDisciplinas()) {
+            if (d.getId().equals(disciplinaId)) {
+                d.modifyDisciplina(disciplina);
+                break;
+            }
         }
-        else {
-            throw new RuntimeException("Curso não encontrado com id: " + cursoId);
-        }
+
+        cursoRepository.save(curso);
     }
 
     /**

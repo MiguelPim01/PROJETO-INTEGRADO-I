@@ -243,8 +243,26 @@ public class CursoController {
      * @param disciplina nova Disciplina contendo as informações a serem modificadas.
      */
     @PutMapping("/curso/{cursoId}/disciplina/{disciplinaId}")
-    public void putDisciplinaFromCurso(@PathVariable("cursoId") Long cId, @PathVariable("disciplinaId") Long dId, @RequestBody Disciplina disciplina) {
-        cursoService.modifyDisciplinaFromCurso(cId, dId, disciplina);
+    public ResponseEntity<Object> putDisciplinaFromCurso(@PathVariable("cursoId") Long cId, @PathVariable("disciplinaId") Long dId, @RequestBody Disciplina disciplina) {
+        try {
+            cursoService.modifyDisciplinaFromCurso(cId, dId, disciplina);
+
+            return ResponseEntity.status(HttpStatus.OK).build();
+        }
+        catch (InvalidDisciplinaException e) {
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("error", "Bad Request");
+            errorResponse.put("message", e.getMessage());
+
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+        }
+        catch (EntityNotFoundException e) {
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("error", "Not Found");
+            errorResponse.put("message", e.getMessage());
+
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+        }
     }
 
     /**
