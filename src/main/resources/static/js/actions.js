@@ -7,28 +7,40 @@ function listaCursos() {
             const listItem = document.createElement('li');
             listItem.id = 'curso' + item.id;
             listItem.classList.add('curso');
+
             listItem.textContent = item.nome; // Assuming each item has a 'nome' property
             // Adicionando um ouvinte de eventos de clique ao listItem
             listItem.addEventListener('click', function() {
                 // Chame aqui a função que você deseja executar ao clicar
                 apresentaDisciplinas(item); // Exemplo de chamada de função
 
-                const cursos = document.getElementsByClassName('curso');
-                Array.from(cursos).forEach(curso => {
-                    curso.style.color = '#F5F5F5';
-                    curso.style.borderBottom = '1px solid #F5F5F5';
-                });
+                trocaCSSCursosPadrao();
 
-                const curso = document.getElementById('curso' + item.id);
-                curso.style.color = '#A1E887';
-                curso.style.borderBottom = '1px solid #A1E887';
+                trocaCSSCursoClicado(item.id);
+
+                listItem.classList.add('cursoClicado');
             });
+
             dataDisplay.appendChild(listItem);
         });
     })
     .catch(error => {
         console.error(error);
     });
+}
+
+function trocaCSSCursosPadrao(){
+    const cursos = document.getElementsByClassName('curso');
+    Array.from(cursos).forEach(curso => {
+        curso.style.color = '#F5F5F5';
+        curso.style.borderBottom = '1px solid #F5F5F5';
+    });
+}
+
+function trocaCSSCursoClicado(cursoId){
+    const curso = document.getElementById('curso' + cursoId);
+    curso.style.color = '#A1E887';
+    curso.style.borderBottom = '1px solid #A1E887';
 }
 
 // Exemplo de função que pode ser chamada quando um item é clicado
@@ -62,7 +74,9 @@ function apresentaDisciplinas(item) {
                 liItem.textContent = disciplina.nome; // Assuming each item has a 'nome' property
                 // Adicionando um ouvinte de eventos de clique ao liItem
                 liItem.addEventListener('click', function() {
-                    preRequisitos(disciplina.id, item.id); // Código para executar quando o liItem é clicado
+                    pathing(disciplina.id, item.id); // Código para executar quando o liItem é clicado
+
+                    liItem.classList.add('disciplinaClicada');
                 });
                 ulItem.appendChild(liItem); // Adiciona o liItem à ulItem correta
             });
@@ -73,15 +87,9 @@ function apresentaDisciplinas(item) {
     }
 }
 
-function preRequisitos(disciplinaId, cursoId){
-    dataDisplay = document.getElementById('paths');
-
-    if(document.getElementById('buttonClose')){
-        document.getElementById('buttonClose').remove();
-    }
-
-    // debugar
+function criaButtonClose(){
     const buttonClose = document.createElement('button');
+
     buttonClose.textContent = 'Voltar';
     buttonClose.style.position = 'absolute';
     buttonClose.style.width = '180px';
@@ -97,13 +105,7 @@ function preRequisitos(disciplinaId, cursoId){
     buttonClose.style.fontSize = '20px';
     buttonClose.id = 'buttonClose';
     buttonClose.addEventListener('click', function(){
-        const disciplinas = document.getElementsByClassName('disciplina');
-        Array.from(disciplinas).forEach(disciplina => {
-            disciplina.style.opacity = '1';
-            disciplina.style.border = 'none';
-            disciplina.style.color = '#F5F5F5';
-            disciplina.style.backgroundColor = '#537A5A';
-        });
+        trocaCSSDisciplinasPadrao();
 
         if(document.getElementById('svg')){
             document.getElementById('svg').remove();
@@ -111,8 +113,21 @@ function preRequisitos(disciplinaId, cursoId){
         buttonClose.remove();
     });
 
+    dataDisplay = document.getElementById('paths');
     dataDisplay.appendChild(buttonClose);
+}
 
+function trocaCSSDisciplinasPadrao(){
+    const disciplinas = document.getElementsByClassName('disciplina');
+    Array.from(disciplinas).forEach(disciplina => {
+        disciplina.style.opacity = '1';
+        disciplina.style.border = 'none';
+        disciplina.style.color = '#F5F5F5';
+        disciplina.style.backgroundColor = '#537A5A';
+    });
+}
+
+function trocaCSSDisciplinasOpacidade(){
     const disciplinas = document.getElementsByClassName('disciplina');
     Array.from(disciplinas).forEach(disciplina => {
         disciplina.style.opacity = '0.4';
@@ -120,40 +135,28 @@ function preRequisitos(disciplinaId, cursoId){
         disciplina.style.color = '#F5F5F5';
         disciplina.style.backgroundColor = '#537A5A';
     });
+}
 
-    axios.get(`curso/${cursoId}/path/${disciplinaId}`)
-    .then(response => {
-        console.log(response.data);
+function trocaCSSDisciplinaPathing(disciplinaId){
+    const disciplina = document.getElementById('disciplina' + disciplinaId);
+    disciplina.style.opacity = '1';
+    disciplina.style.backgroundColor = '#A1E887';
+    disciplina.style.border = '4px solid #537A5A';
+    disciplina.style.color = '#537A5A';
+}
 
-        const disciplinas = document.getElementsByClassName('disciplina');
-        Array.from(disciplinas).forEach(disciplina => {
-            disciplina.style.opacity = '0.4';
-        });
+function trocaCSSDisciplinaClicada(disciplinaId){
+    const disciplina = document.getElementById('disciplina' + disciplinaId);
+    disciplina.style.opacity = '1';
+    disciplina.style.backgroundColor = '#F5F5F5';
+    disciplina.style.border = '4px solid #537A5A';
+    disciplina.style.color = '#537A5A';
+}
 
-        response.data.forEach(item => {
-            const disciplinaA = document.getElementById('disciplina' + item.a.id);
-            const disciplinaB = document.getElementById('disciplina' + item.b.id);
-
-            disciplinaA.style.opacity = '1';
-            disciplinaA.style.backgroundColor = '#A1E887';
-            disciplinaA.style.border = '4px solid #537A5A';
-            disciplinaA.style.color = '#537A5A';
-
-            disciplinaB.style.opacity = '1';
-            disciplinaB.style.backgroundColor = '#A1E887';
-            disciplinaB.style.border = '4px solid #537A5A';
-            disciplinaB.style.color = '#537A5A';
-        });
-
-        const disciplina = document.getElementById('disciplina' + disciplinaId);
-        disciplina.style.backgroundColor = '#F5F5F5';
-    })
-
-    if(document.getElementById('svg')){
-        document.getElementById('svg').remove();
-    }
-
+function criaSVG(){
     const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    const dataDisplay = document.getElementById('paths');
+
     svg.setAttribute('width', dataDisplay.scrollWidth + 'px');
     svg.setAttribute('height', '100%');
     svg.style.position = 'absolute';
@@ -170,32 +173,63 @@ function preRequisitos(disciplinaId, cursoId){
 
     dataDisplay.appendChild(svg);
 
+    return svg;
+}
+
+function criaLinha(idA, idB){
+    const connection = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    const svg = document.getElementById('svg');
+
+    connection.id = 'connection' + idA + '-' + idB;
+
+    const disciplinaA = document.getElementById('disciplina' + idA);
+    const disciplinaB = document.getElementById('disciplina' + idB);
+
+    var posA = disciplinaA.getBoundingClientRect();
+    var posB = disciplinaB.getBoundingClientRect();
+    var svgPos = svg.getBoundingClientRect();
+
+    // Ajuste para coordenadas relativas ao SVG
+    connection.setAttribute('x1', posA.left + posA.width - svgPos.left);
+    connection.setAttribute('y1', posA.top + posA.height / 2 - svgPos.top);
+    connection.setAttribute('x2', posB.left - svgPos.left);
+    connection.setAttribute('y2', posB.top + posB.height / 2 - svgPos.top);
+
+    connection.setAttribute('stroke', '#537A5A');
+    connection.setAttribute('stroke-width', '3');
+
+    svg.appendChild(connection);
+}
+
+function pathing(disciplinaId, cursoId){
+    dataDisplay = document.getElementById('paths');
+
+    if(!(document.getElementById('buttonClose'))){
+        criaButtonClose();
+    }
+
+    trocaCSSDisciplinasOpacidade();
+
     axios.get(`curso/${cursoId}/path/${disciplinaId}`)
     .then(response => {
-        console.log(response.data);
-
         response.data.forEach(item => {
-            const connection = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            trocaCSSDisciplinaPathing(item.a.id);
+            trocaCSSDisciplinaPathing(item.b.id);
+        });
 
-            connection.id = 'connection' + item.a.id + '-' + item.b.id;
+        trocaCSSDisciplinaClicada(disciplinaId);
+    })
 
-            const disciplinaA = document.getElementById('disciplina' + item.a.id);
-            const disciplinaB = document.getElementById('disciplina' + item.b.id);
+    if(document.getElementById('svg')){
+        document.getElementById('svg').remove();
+    }
 
-            var posA = disciplinaA.getBoundingClientRect();
-            var posB = disciplinaB.getBoundingClientRect();
-            var svgPos = svg.getBoundingClientRect();
+    criaSVG();
 
-            // Ajuste para coordenadas relativas ao SVG
-            connection.setAttribute('x1', posA.left + posA.width - svgPos.left);
-            connection.setAttribute('y1', posA.top + posA.height / 2 - svgPos.top);
-            connection.setAttribute('x2', posB.left - svgPos.left);
-            connection.setAttribute('y2', posB.top + posB.height / 2 - svgPos.top);
-
-            connection.setAttribute('stroke', '#537A5A');
-            connection.setAttribute('stroke-width', '2');
-
-            svg.appendChild(connection);
+    axios.get(`curso/${cursoId}/path/${disciplinaId}`)
+    .then(response => {
+        response.data.forEach(item => {
+            criaLinha(item.a.id, item.b.id);
         });
     })
     .catch(error => {
@@ -221,3 +255,13 @@ function scrollPaths(){
         this.scrollLeft += event.deltaY * 2;
     }, { passive: false }); // O uso de { passive: false } permite que preventDefault funcione
 }
+/*
+function onResize(){
+    var cursoClicado = document.getElementsByClassName('cursoClicado');
+    var disciplinaClicada = document.getElementsByClassName('disciplinaClicada');
+
+    console.log(cursoClicado.id);
+    console.log(disciplinaClicada.id);
+
+    pathing(cursoClicado.id, disciplinaClicada.id);
+}*/
