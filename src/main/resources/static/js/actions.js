@@ -5,7 +5,7 @@ function listaCursos() {
         dataDisplay.innerHTML = ''; // Clear previous content
         response.data.forEach(item => {
             const listItem = document.createElement('li');
-            listItem.id = 'curso' + item.id;
+            listItem.id = item.id;
             listItem.classList.add('curso');
 
             listItem.textContent = item.nome; // Assuming each item has a 'nome' property
@@ -17,6 +17,11 @@ function listaCursos() {
                 trocaCSSCursosPadrao();
 
                 trocaCSSCursoClicado(item.id);
+
+                if(document.getElementsByClassName('cursoClicado')[0]){
+                    var cursoClicado = document.getElementsByClassName('cursoClicado')[0];
+                    cursoClicado.classList.remove('cursoClicado');
+                }
 
                 listItem.classList.add('cursoClicado');
             });
@@ -38,7 +43,7 @@ function trocaCSSCursosPadrao(){
 }
 
 function trocaCSSCursoClicado(cursoId){
-    const curso = document.getElementById('curso' + cursoId);
+    const curso = document.getElementById(cursoId);
     curso.style.color = '#A1E887';
     curso.style.borderBottom = '1px solid #A1E887';
 }
@@ -70,11 +75,16 @@ function apresentaDisciplinas(item) {
                 const liItem = document.createElement('li');
                 liItem.classList.add('disciplina');
                 liItem.style.zIndex = '1';
-                liItem.id = 'disciplina' + disciplina.id;
+                liItem.id = disciplina.id;
                 liItem.textContent = disciplina.nome; // Assuming each item has a 'nome' property
                 // Adicionando um ouvinte de eventos de clique ao liItem
                 liItem.addEventListener('click', function() {
                     pathing(disciplina.id, item.id); // Código para executar quando o liItem é clicado
+
+                    if(document.getElementsByClassName('disciplinaClicada')[0]){
+                        var disciplinaClicada = document.getElementsByClassName('disciplinaClicada')[0];
+                        disciplinaClicada.classList.remove('disciplinaClicada');
+                    }
 
                     liItem.classList.add('disciplinaClicada');
                 });
@@ -130,15 +140,17 @@ function trocaCSSDisciplinasPadrao(){
 function trocaCSSDisciplinasOpacidade(){
     const disciplinas = document.getElementsByClassName('disciplina');
     Array.from(disciplinas).forEach(disciplina => {
-        disciplina.style.opacity = '0.4';
-        disciplina.style.border = 'none';
-        disciplina.style.color = '#F5F5F5';
-        disciplina.style.backgroundColor = '#537A5A';
+        if(!(disciplina.classList.contains('disciplinaClicada') || window.getComputedStyle(disciplina).getPropertyValue('background-color') == 'rgb(161, 232, 135)')){
+            disciplina.style.opacity = '0.4';
+            disciplina.style.border = 'none';
+            disciplina.style.color = '#F5F5F5';
+            disciplina.style.backgroundColor = '#537A5A';
+        }
     });
 }
 
 function trocaCSSDisciplinaPathing(disciplinaId){
-    const disciplina = document.getElementById('disciplina' + disciplinaId);
+    const disciplina = document.getElementById(disciplinaId);
     disciplina.style.opacity = '1';
     disciplina.style.backgroundColor = '#A1E887';
     disciplina.style.border = '4px solid #537A5A';
@@ -146,7 +158,7 @@ function trocaCSSDisciplinaPathing(disciplinaId){
 }
 
 function trocaCSSDisciplinaClicada(disciplinaId){
-    const disciplina = document.getElementById('disciplina' + disciplinaId);
+    const disciplina = document.getElementById(disciplinaId);
     disciplina.style.opacity = '1';
     disciplina.style.backgroundColor = '#F5F5F5';
     disciplina.style.border = '4px solid #537A5A';
@@ -182,8 +194,8 @@ function criaLinha(idA, idB){
 
     connection.id = 'connection' + idA + '-' + idB;
 
-    const disciplinaA = document.getElementById('disciplina' + idA);
-    const disciplinaB = document.getElementById('disciplina' + idB);
+    const disciplinaA = document.getElementById(idA);
+    const disciplinaB = document.getElementById(idB);
 
     var posA = disciplinaA.getBoundingClientRect();
     var posB = disciplinaB.getBoundingClientRect();
@@ -208,8 +220,6 @@ function pathing(disciplinaId, cursoId){
         criaButtonClose();
     }
 
-    trocaCSSDisciplinasOpacidade();
-
     axios.get(`curso/${cursoId}/path/${disciplinaId}`)
     .then(response => {
         response.data.forEach(item => {
@@ -219,6 +229,8 @@ function pathing(disciplinaId, cursoId){
 
         trocaCSSDisciplinaClicada(disciplinaId);
     })
+
+    trocaCSSDisciplinasOpacidade();
 
     if(document.getElementById('svg')){
         document.getElementById('svg').remove();
@@ -255,13 +267,21 @@ function scrollPaths(){
         this.scrollLeft += event.deltaY * 2;
     }, { passive: false }); // O uso de { passive: false } permite que preventDefault funcione
 }
-/*
+
 function onResize(){
-    var cursoClicado = document.getElementsByClassName('cursoClicado');
-    var disciplinaClicada = document.getElementsByClassName('disciplinaClicada');
+    console.log('resize');
 
-    console.log(cursoClicado.id);
-    console.log(disciplinaClicada.id);
+    var cursoClicado = document.getElementsByClassName('cursoClicado')[0];
+    var disciplinaClicada = document.getElementsByClassName('disciplinaClicada')[0];
 
-    pathing(cursoClicado.id, disciplinaClicada.id);
-}*/
+    console.log(cursoClicado);
+    console.log(disciplinaClicada);
+
+    if(cursoClicado && disciplinaClicada){
+        
+        console.log(cursoClicado.id);
+        console.log(disciplinaClicada.id);
+
+        pathing(disciplinaClicada.id, cursoClicado.id);
+    }
+}
