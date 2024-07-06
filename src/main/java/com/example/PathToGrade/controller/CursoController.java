@@ -272,8 +272,19 @@ public class CursoController {
      * @param dId id da Disciplina.
      */
     @DeleteMapping("/curso/{cursoId}/disciplina/{disciplinaId}")
-    public void deleteDisciplinaFromCurso(@PathVariable("cursoId") Long cId, @PathVariable("disciplinaId") Long dId) {
-        cursoService.deleteDisciplinaFromCurso(cId, dId);
+    public ResponseEntity<Object> deleteDisciplinaFromCurso(@PathVariable("cursoId") Long cId, @PathVariable("disciplinaId") Long dId) {
+        try {
+            cursoService.deleteDisciplinaFromCurso(cId, dId);
+
+            return ResponseEntity.status(HttpStatus.OK).build();
+        }
+        catch (EntityNotFoundException e) {
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("error", "Not Found");
+            errorResponse.put("message", e.getMessage());
+
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+        }
     }
 
     /**

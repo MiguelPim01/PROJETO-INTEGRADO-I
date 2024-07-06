@@ -225,33 +225,28 @@ public class CursoService {
      * 
      * @param cursoId id do Curso.
      * @param disciplinaId id da Disciplina.
-     * @throws RunTimeException
+     * @throws EntityNotFoundException
      */
-    public void deleteDisciplinaFromCurso(Long cursoId, Long disciplinaId) {
-        Optional<Curso> cursoOp = cursoRepository.findById(cursoId);
+    public void deleteDisciplinaFromCurso(Long cursoId, Long disciplinaId) throws EntityNotFoundException {
+        Curso curso = this.getCursoById(cursoId);
+
         boolean flag = false;
 
-        if (cursoOp.isPresent()) {
-            Curso curso = cursoOp.get();
+        for (Disciplina d : curso.getDisciplinas()) {
+            if (d.getId().equals(disciplinaId)) {
+                curso.getDisciplinas().remove(d);
+                flag = true;
+                break;
+            }
+        }
 
-            for (Disciplina d : curso.getDisciplinas()) {
-                if (d.getId().equals(disciplinaId)) {
-                    curso.getDisciplinas().remove(d);
-                    flag = true;
-                    break;
-                }
-            }
-
-            if (flag) {
-                cursoRepository.save(curso);
-            }
-            else {
-                throw new RuntimeException("Error: Disciplina não existe!");
-            }
+        if (flag) {
+            cursoRepository.save(curso);
         }
         else {
-            throw new RuntimeException("Curso não encontrado com id: " + cursoId);
+            throw new EntityNotFoundException("Disciplina não encontrada com id: " + disciplinaId);
         }
+        
     }
 
     /**
