@@ -30,7 +30,8 @@ public class CursoControllerTest {
     private MockMvc mockMvc;
 
     private Long cursoId;
-    private Long disciplinaId;
+    private Long disciplinaIdA;
+    // private Long disciplinaIdB;
 
     @Test
     @Order(1)
@@ -42,7 +43,7 @@ public class CursoControllerTest {
     }
 
     @Test
-    @Order(2)
+    @Order(1)
     public void testPostCurso() throws Exception {
         String cursoContent = "{\"nome\":\"Curso Teste\", \"qtdPeriodos\":10}";
 
@@ -56,7 +57,7 @@ public class CursoControllerTest {
     }
 
     @Test
-    @Order(3)
+    @Order(2)
     public void testPutCurso() throws Exception {
         String cursoContent = "{\"nome\":\"Curso Mudado\", \"qtdPeriodos\":12}";
         String url = "/curso/" + cursoId;
@@ -71,7 +72,7 @@ public class CursoControllerTest {
     }
 
     @Test
-    @Order(3)
+    @Order(2)
     public void testUnknownDisciplinaId() throws Exception {
         String url = "/curso/" + cursoId + "/disciplina/123123123123";
 
@@ -82,22 +83,73 @@ public class CursoControllerTest {
     }
 
     @Test
-    @Order(4)
+    @Order(2)
     public void testPostDisciplina() throws Exception {
-        String disciplinaContent = "{\"nome\":\"Disciplina Teste\", \"codigo\":\"COD00001\", \"cargaHoraria\": 60, \"periodo\": 1}";
+        String disciplinaContentA = "{\"nome\":\"Disciplina Teste\", \"codigo\":\"COD00001\", \"cargaHoraria\": 60, \"periodo\": 1}";
+        String disciplinaContentB = "{\"nome\":\"Disciplina PreRequisito\", \"codigo\":\"COD00002\", \"cargaHoraria\": 75, \"periodo\": 2}";
 
         String url = "/curso/" + cursoId + "/disciplina";
 
-        ResultActions result = mockMvc.perform(post(url).contentType(MediaType.APPLICATION_JSON).content(disciplinaContent))
+        // Faz o POST da primeira disciplina
+        ResultActions result = mockMvc.perform(post(url).contentType(MediaType.APPLICATION_JSON).content(disciplinaContentA))
         .andExpect(status().isCreated());
 
         String responseString = result.andReturn().getResponse().getContentAsString();
 
-        disciplinaId = Long.valueOf(responseString);
+        disciplinaIdA = Long.valueOf(responseString);
+
+        // Faz o POST da segunda disciplina
+        result = mockMvc.perform(post(url).contentType(MediaType.APPLICATION_JSON).content(disciplinaContentB))
+        .andExpect(status().isCreated());
+
+        // responseString = result.andReturn().getResponse().getContentAsString();
+
+        // disciplinaIdB = Long.valueOf(responseString);
+    }
+
+    @Test
+    @Order(3)
+    public void testPutDisciplina() throws Exception {
+        String disciplinaContent = "{\"nome\":\"Disciplina Modificada\", \"codigo\":\"COD00003\", \"cargaHoraria\": 90, \"periodo\": 5}";
+
+        String url = "/curso/" + cursoId + "/disciplina/" + disciplinaIdA;
+
+        mockMvc.perform(put(url).contentType(MediaType.APPLICATION_JSON).content(disciplinaContent))
+        .andExpect(status().isOk());
+
+        mockMvc.perform(get(url).contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.nome").value("Disciplina Modificada"))
+        .andExpect(jsonPath("$.codigo").value("COD00003"))
+        .andExpect(jsonPath("$.cargaHoraria").value(90))
+        .andExpect(jsonPath("$.periodo").value(5));
+    }
+
+    @Test
+    @Order(4)
+    public void testPostDependencia() throws Exception {
+        String dependenciaContent = "{\"disciplinaA\":\"COD00002\", \"disciplinaB\":\"COD00003\"}";
+
+        String url = "/curso/" + cursoId + "/preRequisito";
+
+        mockMvc.perform(post(url).contentType(MediaType.APPLICATION_JSON).content(dependenciaContent))
+        .andExpect(status().isCreated());
     }
 
     @Test
     @Order(5)
+    public void testDeleteDisciplina() throws Exception {
+        String url = "/curso/" + cursoId + "/disciplina/" + disciplinaIdA;
+
+        mockMvc.perform(delete(url).contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk());
+
+        mockMvc.perform(get(url).contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @Order(6)
     public void testDeleteCurso() throws Exception {
         String url = "/curso/" + cursoId;
 

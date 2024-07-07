@@ -296,7 +296,7 @@ public class CursoController {
         try {
             cursoService.saveDisciplinaListInCurso(cursoId, disciplinas);
 
-            return ResponseEntity.status(HttpStatus.OK).build();
+            return ResponseEntity.status(HttpStatus.CREATED).build();
         }
         catch (InvalidDisciplinaException e) {
             Map<String, String> errorResponse = new HashMap<>();
@@ -325,7 +325,7 @@ public class CursoController {
         try {
             cursoService.addDependencia(cursoId, dependencia.getDisciplinaA(), dependencia.getDisciplinaB());
 
-            return ResponseEntity.status(HttpStatus.OK).build();
+            return ResponseEntity.status(HttpStatus.CREATED).build();
         }
         catch (EntityNotFoundException e) {
             Map<String, String> errorResponse = new HashMap<>();

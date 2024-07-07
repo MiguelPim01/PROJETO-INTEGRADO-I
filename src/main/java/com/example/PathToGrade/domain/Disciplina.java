@@ -3,6 +3,7 @@ package com.example.PathToGrade.domain;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.example.PathToGrade.exceptions.InvalidDependenciaException;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.CascadeType;
@@ -107,12 +108,12 @@ public class Disciplina {
      * 
      * @param preRequisito disciplina pré-requisito. Não pode ser <code>null</code>.
      */
-    public void addArestaChegando(Disciplina preRequisito) {
+    public void addArestaChegando(Disciplina preRequisito) throws InvalidDependenciaException {
         Aresta a = new Aresta(preRequisito, this);
 
         for (Aresta ar : this.arestasChegando) {
             if (ar.getOrigemCodigo().equals(a.getOrigemCodigo()) && ar.getDestinoCodigo().equals(a.getDestinoCodigo())) {
-                throw new RuntimeException("fatal error: A dependencia já existe neste curso.");
+                throw new InvalidDependenciaException("A dependencia já existe neste curso.");
             }
         }
 
@@ -151,4 +152,5 @@ public class Disciplina {
             a.setOrigemCodigo(this.codigo);
         }
     }
+    
 }

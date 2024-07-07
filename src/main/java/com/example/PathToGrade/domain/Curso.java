@@ -7,6 +7,8 @@ import java.util.Set;
 
 import org.antlr.v4.runtime.misc.Pair;
 
+import com.example.PathToGrade.exceptions.InvalidDependenciaException;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityNotFoundException;
@@ -95,8 +97,9 @@ public class Curso {
      * 
      * @param disciplinaA disciplina pré-requisito. Não pode ser <code>null</code>.
      * @param disciplinaB disciplina. Não pode ser <code>null</code>.
+     * @throws EntityNotFoundException
      */
-    public void addPreRequisito(String disciplinaA, String disciplinaB) {
+    public void addPreRequisito(String disciplinaA, String disciplinaB) throws EntityNotFoundException, InvalidDependenciaException {
         Disciplina disciplina = null, preRequisito = null;
 
         for (Disciplina d : this.disciplinas) {
@@ -107,7 +110,7 @@ public class Curso {
         }
 
         if (preRequisito == null) {
-            throw new RuntimeException("fatal error: Disciplina não encontrada, id: " + disciplinaA);
+            throw new EntityNotFoundException("Disciplina não encontrada com id: " + disciplinaA);
         }
 
         for (Disciplina d : this.disciplinas) {
@@ -118,7 +121,7 @@ public class Curso {
         }
 
         if (disciplina == null) {
-            throw new RuntimeException("fatal error: Disciplina não encontrada, id: " + disciplinaB);
+            throw new EntityNotFoundException("Disciplina não encontrada com id: " + disciplinaB);
         }
 
         disciplina.addArestaChegando(preRequisito);
@@ -130,8 +133,9 @@ public class Curso {
      * 
      * @param disciplinaId id da disciplina em que o dfs irá iniciar.
      * @return Um conjunto com todos os pares de disciplinas encontrado pelo {@link #dfs(Set, Set, Disciplina)} e {@link #dfsTransp(Set, Set, Disciplina)}.
+     * @throws EntityNotFoundException
      */
-    public Set<Pair<Disciplina, Disciplina>> findPathToDisciplina(Long disciplinaId) {
+    public Set<Pair<Disciplina, Disciplina>> findPathToDisciplina(Long disciplinaId) throws EntityNotFoundException {
         Set<Disciplina> visitados = new HashSet<>();
         Set<Pair<Disciplina, Disciplina>> dependencias = new HashSet<>();
 
@@ -145,7 +149,7 @@ public class Curso {
         }
 
         if (inicio == null) {
-            throw new RuntimeException("fatal error: Disciplina não encontrada, id: " + disciplinaId);
+            throw new EntityNotFoundException("Disciplina não encontrada com id: " + disciplinaId);
         }
 
         visitados.add(inicio);
