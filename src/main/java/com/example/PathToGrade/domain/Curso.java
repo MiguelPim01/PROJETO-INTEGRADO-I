@@ -9,6 +9,7 @@ import org.antlr.v4.runtime.misc.Pair;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -67,6 +68,16 @@ public class Curso {
         this.nome = nome;
         this.qtdPeriodos = qtdPeriodos;
         this.disciplinas = new ArrayList<>();
+    }
+
+    public Disciplina getDisciplinaByCodigo(String codigo) throws EntityNotFoundException {
+        for (Disciplina d : this.disciplinas) {
+            if (d.getCodigo().equals(codigo)) {
+                return d;
+            }
+        }
+
+        throw new EntityNotFoundException("Disciplina não encontrada com o código: " + codigo);
     }
 
     /**

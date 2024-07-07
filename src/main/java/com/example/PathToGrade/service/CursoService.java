@@ -122,13 +122,13 @@ public class CursoService {
      * @throws InvalidDisciplinaException
      * @throws EntityNotFoundException
      */
-    public void saveDisciplinaInCurso(Long cursoId, Disciplina disciplina) throws InvalidDisciplinaException, EntityNotFoundException {
+    public Long saveDisciplinaInCurso(Long cursoId, Disciplina disciplina) throws InvalidDisciplinaException, EntityNotFoundException {
         Curso curso = this.getCursoById(cursoId);
 
         // Verifica se a disciplina é invalida
         if (disciplina.getCodigo() == null || 
             disciplina.getNome() == null || 
-            !(disciplina.getPeriodo() >= 2 && disciplina.getPeriodo() <= curso.getQtdPeriodos()) ||
+            !(disciplina.getPeriodo() > 0 && disciplina.getPeriodo() <= curso.getQtdPeriodos()) ||
             disciplina.getCargaHoraria() == null) {
 
             throw new InvalidDisciplinaException("Disciplina Inválida!");
@@ -146,6 +146,8 @@ public class CursoService {
 
         // Leva essa informação para o banco de dados
         cursoRepository.save(curso);
+
+        return curso.getDisciplinaByCodigo(disciplina.getCodigo()).getId();
     }
 
     /**

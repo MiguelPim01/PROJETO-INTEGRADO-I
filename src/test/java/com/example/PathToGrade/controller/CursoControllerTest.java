@@ -29,7 +29,8 @@ public class CursoControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    private Long id;
+    private Long cursoId;
+    private Long disciplinaId;
 
     @Test
     @Order(1)
@@ -51,14 +52,14 @@ public class CursoControllerTest {
 
         String responseString = result.andReturn().getResponse().getContentAsString();
 
-        id = Long.valueOf(responseString);
+        cursoId = Long.valueOf(responseString);
     }
 
     @Test
     @Order(3)
     public void testPutCurso() throws Exception {
         String cursoContent = "{\"nome\":\"Curso Mudado\", \"qtdPeriodos\":12}";
-        String url = "/curso/" + id;
+        String url = "/curso/" + cursoId;
 
         mockMvc.perform(put(url).contentType(MediaType.APPLICATION_JSON).content(cursoContent))
         .andExpect(status().isOk());
@@ -72,7 +73,7 @@ public class CursoControllerTest {
     @Test
     @Order(3)
     public void testUnknownDisciplinaId() throws Exception {
-        String url = "/curso/" + id + "/disciplina/123123123123";
+        String url = "/curso/" + cursoId + "/disciplina/123123123123";
 
         mockMvc.perform(get(url).contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isNotFound())
@@ -82,8 +83,23 @@ public class CursoControllerTest {
 
     @Test
     @Order(4)
+    public void testPostDisciplina() throws Exception {
+        String disciplinaContent = "{\"nome\":\"Disciplina Teste\", \"codigo\":\"COD00001\", \"cargaHoraria\": 60, \"periodo\": 1}";
+
+        String url = "/curso/" + cursoId + "/disciplina";
+
+        ResultActions result = mockMvc.perform(post(url).contentType(MediaType.APPLICATION_JSON).content(disciplinaContent))
+        .andExpect(status().isCreated());
+
+        String responseString = result.andReturn().getResponse().getContentAsString();
+
+        disciplinaId = Long.valueOf(responseString);
+    }
+
+    @Test
+    @Order(5)
     public void testDeleteCurso() throws Exception {
-        String url = "/curso/" + id;
+        String url = "/curso/" + cursoId;
 
         mockMvc.perform(delete(url).contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk());

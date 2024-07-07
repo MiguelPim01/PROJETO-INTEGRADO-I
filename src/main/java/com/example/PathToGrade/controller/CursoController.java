@@ -191,9 +191,7 @@ public class CursoController {
     @PostMapping("/curso/{cursoId}/disciplina")
     public ResponseEntity<Object> postDisciplinaInCurso(@PathVariable("cursoId") Long cursoId, @RequestBody Disciplina disciplina) {
         try {
-            cursoService.saveDisciplinaInCurso(cursoId, disciplina);
-
-            return ResponseEntity.status(HttpStatus.OK).build();
+            return ResponseEntity.status(HttpStatus.CREATED).body(cursoService.saveDisciplinaInCurso(cursoId, disciplina));
         }
         catch (InvalidDisciplinaException e) {
             Map<String, String> errorResponse = new HashMap<>();
