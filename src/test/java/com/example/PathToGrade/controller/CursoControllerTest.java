@@ -18,7 +18,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-// import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -31,7 +30,7 @@ public class CursoControllerTest {
 
     private Long cursoId;
     private Long disciplinaIdA;
-    // private Long disciplinaIdB;
+    private Long disciplinaIdB;
 
     @Test
     @Order(1)
@@ -102,9 +101,9 @@ public class CursoControllerTest {
         result = mockMvc.perform(post(url).contentType(MediaType.APPLICATION_JSON).content(disciplinaContentB))
         .andExpect(status().isCreated());
 
-        // responseString = result.andReturn().getResponse().getContentAsString();
+        responseString = result.andReturn().getResponse().getContentAsString();
 
-        // disciplinaIdB = Long.valueOf(responseString);
+        disciplinaIdB = Long.valueOf(responseString);
     }
 
     @Test
@@ -138,6 +137,19 @@ public class CursoControllerTest {
 
     @Test
     @Order(5)
+    public void testPreRequisitoExistence() throws Exception {
+        String url1 = "/curso/" + cursoId + "/path/" + disciplinaIdA;
+        String url2 = "/curso/" + cursoId + "/path/" + disciplinaIdB;
+
+        mockMvc.perform(get(url1).contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk());
+
+        mockMvc.perform(get(url2).contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk());
+    }
+
+    @Test
+    @Order(6)
     public void testDeleteDisciplina() throws Exception {
         String url = "/curso/" + cursoId + "/disciplina/" + disciplinaIdA;
 
@@ -149,7 +161,7 @@ public class CursoControllerTest {
     }
 
     @Test
-    @Order(6)
+    @Order(7)
     public void testDeleteCurso() throws Exception {
         String url = "/curso/" + cursoId;
 
