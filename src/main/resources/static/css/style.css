@@ -74,14 +74,12 @@ nav #dropdown-content li{
     cursor: pointer;
 }
 
-/*
 nav #dropdown-content li:hover{
     list-style: none;
     padding: 15px;
     color: var(--verde-claro);
     border-bottom: 1px solid var(--verde-claro);
 }
-*/
 
 nav footer{
     position: absolute;

@@ -50,25 +50,29 @@ function trocaCSSCursosPadrao(){
 }
 
 /**
- * Coloca o CSS de curso clicado.
+ * Coloca o CSS no curso clicado.
  * 
  * @function apresentaDisciplinas
- * @param {string} cursoId - Id do curso clicado.
  */
-function trocaCSSCursoClicado(cursoId){
-    const curso = document.getElementById(cursoId);
+function trocaCSSCursoClicado(){
+    const curso = document.getElementsByClassName('cursoClicado')[0];
     curso.style.color = '#A1E887';
     curso.style.borderBottom = '1px solid #A1E887';
 }
 
-// Exemplo de função que pode ser chamada quando um item é clicado
-function apresentaDisciplinas(item) {
+/**
+ * Função responsável por apresentar na tela as disciplinas de um curso.
+ * 
+ * @function apresentaDisciplinas
+ * @param {Object} curso - Objeto que contém as informações do curso.
+ */
+function apresentaDisciplinas(curso) {
     const dataDisplay = document.getElementById('paths');
-    dataDisplay.innerHTML = ''; // Clear previous content
+    dataDisplay.innerHTML = ''; // Limpa conteudo anterior
 
-    trocaCSSPaths(dataDisplay);
+    trocaCSSPaths();
 
-    for (let i = 1; i <= item.qtdPeriodos; i++) { // Ajuste para incluir o último período
+    for (let i = 1; i <= curso.qtdPeriodos; i++) {
         const ulItem = document.createElement('ul');
         ulItem.id = 'periodo' + i;
         dataDisplay.appendChild(ulItem);
@@ -79,7 +83,7 @@ function apresentaDisciplinas(item) {
 
         ulItem.appendChild(liItemPeriodo);
 
-        axios.get(`/curso/${item.id}/disciplina`)
+        axios.get(`/curso/${curso.id}/disciplina`)
         .then(response => {
             response.data.forEach(disciplina => {
                 if (disciplina.periodo != i) {
@@ -89,10 +93,10 @@ function apresentaDisciplinas(item) {
                 liItem.classList.add('disciplina');
                 liItem.style.zIndex = '1';
                 liItem.id = disciplina.id;
-                liItem.textContent = disciplina.nome; // Assuming each item has a 'nome' property
-                // Adicionando um ouvinte de eventos de clique ao liItem
+                liItem.textContent = disciplina.nome; 
+
                 liItem.addEventListener('click', function() {
-                    pathing(disciplina.id, item.id); // Código para executar quando o liItem é clicado
+                    pathing(disciplina.id, curso.id);
 
                     if(document.getElementsByClassName('disciplinaClicada')[0]){
                         var disciplinaClicada = document.getElementsByClassName('disciplinaClicada')[0];
@@ -101,7 +105,8 @@ function apresentaDisciplinas(item) {
 
                     liItem.classList.add('disciplinaClicada');
                 });
-                ulItem.appendChild(liItem); // Adiciona o liItem à ulItem correta
+
+                ulItem.appendChild(liItem);
             });
         })
         .catch(error => {
@@ -110,6 +115,11 @@ function apresentaDisciplinas(item) {
     }
 }
 
+/**
+ * Função responsável por criar o botão de voltar as disciplinas para o normal.
+ * 
+ * @function criaButtonClose
+ */
 function criaButtonClose(){
     const buttonClose = document.createElement('button');
 
@@ -140,6 +150,11 @@ function criaButtonClose(){
     dataDisplay.appendChild(buttonClose);
 }
 
+/**
+ * Coloca o CSS padrão em todas as disciplinas.
+ * 
+ * @function trocaCSSDisciplinasPadrao
+ */
 function trocaCSSDisciplinasPadrao(){
     const disciplinas = document.getElementsByClassName('disciplina');
     Array.from(disciplinas).forEach(disciplina => {
@@ -150,6 +165,11 @@ function trocaCSSDisciplinasPadrao(){
     });
 }
 
+/**
+ * Coloca o CSS diminuindo a opacidade nas disciplinas que não foram clicadas ou que não fazem parte do caminho de dependências.
+ * 
+ * @function trocaCSSDisciplinasOpacidade
+ */
 function trocaCSSDisciplinasOpacidade(){
     const disciplinas = document.getElementsByClassName('disciplina');
     Array.from(disciplinas).forEach(disciplina => {
@@ -162,6 +182,11 @@ function trocaCSSDisciplinasOpacidade(){
     });
 }
 
+/**
+ * Coloca o CSS nas disciplinas que fazem parte do caminho de dependências.
+ * 
+ * @function trocaCSSDisciplinaPathing
+ */
 function trocaCSSDisciplinaPathing(){
     const disciplina = document.getElementsByClassName('disciplinaPathing');
     Array.from(disciplina).forEach(disciplina => {
@@ -172,6 +197,11 @@ function trocaCSSDisciplinaPathing(){
     });
 }
 
+/**
+ * Coloca o CSS na disciplina clicada.
+ * 
+ * @function trocaCSSDisciplinaClicada
+ */
 function trocaCSSDisciplinaClicada(){
     const disciplina = document.getElementsByClassName('disciplinaClicada')[0];
     disciplina.style.opacity = '1';
@@ -180,6 +210,11 @@ function trocaCSSDisciplinaClicada(){
     disciplina.style.color = '#537A5A';
 }
 
+/**
+ * Função responsável por criar o SVG onde as linhas que representam as dependências entre as disciplinas irão ser incluídas.
+ * 
+ * @function criaSVG
+ */
 function criaSVG(){
     const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     const dataDisplay = document.getElementById('paths');
@@ -203,6 +238,13 @@ function criaSVG(){
     return svg;
 }
 
+/**
+ * Função responsável por criar as linhas que representam as dependências entre as disciplinas.
+ * 
+ * @function criaLinha
+ * @param {String} idA - Id da disciplina A.
+ * @param {String} idB - Id da disciplina B.
+ */
 function criaLinha(idA, idB){
     const connection = document.createElementNS('http://www.w3.org/2000/svg', 'line');
     const svg = document.getElementById('svg');
@@ -228,6 +270,13 @@ function criaLinha(idA, idB){
     svg.appendChild(connection);
 }
 
+/**
+ * Função chamada ao clicar em uma disciplina, responsável por criar as linhas que representam as dependências entre as disciplinas.
+ * 
+ * @function pathing
+ * @param {String} disciplinaId - Id da disciplina.
+ * @param {String} cursoId - Id do curso.
+ */
 function pathing(disciplinaId, cursoId){
     dataDisplay = document.getElementById('paths');
 
@@ -268,12 +317,23 @@ function pathing(disciplinaId, cursoId){
     })
 }
 
-function trocaCSSPaths(dataDisplay){
+/**
+ * Muda o CSS da section que contém as disciplinas.
+ * 
+ * @function trocaCSSPaths
+ */
+function trocaCSSPaths(){
+    const dataDisplay = document.getElementById('paths');
     dataDisplay.style.flexDirection = 'row';
     dataDisplay.style.alignItems = 'stretch';
     dataDisplay.style.justifyContent = 'space-around';
 }
 
+/**
+ * Função responsável por permitir a rolagem horizontal na section que contém as disciplinas.
+ * 
+ * @function scrollPaths
+ */
 function scrollPaths(){
     // Seleciona o elemento que tem overflow-x
     const sectionPaths = document.getElementById('paths');
@@ -287,20 +347,18 @@ function scrollPaths(){
     }, { passive: false }); // O uso de { passive: false } permite que preventDefault funcione
 }
 
+/**
+ * Função responsável por recalcular as posições das linhas que representam as dependências entre as disciplinas ao redimensionar a tela.
+ * 
+ * @function criaDivAcompanha
+ */
 function onResize(){
     console.log('resize');
 
     var cursoClicado = document.getElementsByClassName('cursoClicado')[0];
     var disciplinaClicada = document.getElementsByClassName('disciplinaClicada')[0];
 
-    console.log(cursoClicado);
-    console.log(disciplinaClicada);
-
     if(cursoClicado && disciplinaClicada){
-        
-        console.log(cursoClicado.id);
-        console.log(disciplinaClicada.id);
-
         pathing(disciplinaClicada.id, cursoClicado.id);
     }
 }
