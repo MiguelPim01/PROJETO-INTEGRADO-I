@@ -15,5 +15,11 @@ import com.example.PathToGrade.domain.Curso;
  */
 public interface CursoRepository extends CrudRepository<Curso, Long> {
     
+    /**
+     * Busca um Curso no repositorio a partir do nome dele.
+     * 
+     * @param nome nome do Curso.
+     * @return Retorna um tipo Optional de Curso.
+     */
     Optional<Curso> findByNome(String nome);
 }
