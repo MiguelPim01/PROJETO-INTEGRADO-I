@@ -28,7 +28,6 @@ import lombok.Setter;
  * id, nome, codigo, carga horária e periodo, ela também armazena a arestas que vão dela para uma outra disciplina,
  * e as aresta que chegam de uma disciplina até ela.
  * 
- * @version %I%, %G%
  */
 @Entity
 @Getter

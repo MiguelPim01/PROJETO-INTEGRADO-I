@@ -30,7 +30,6 @@ import lombok.Setter;
  * <p>
  * Com isso temos todos os elementos de um grafo a partir da classe Curso.
  * 
- * @version %I%, %G%
  */
 @Entity
 @Getter

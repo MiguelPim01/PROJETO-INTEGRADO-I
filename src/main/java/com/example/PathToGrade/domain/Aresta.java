@@ -22,7 +22,6 @@ import lombok.Setter;
  * Contém a referência para duas disciplinas e os seus respectivos códigos, onde uma Disciplina é a origem da Aresta
  * e a outra é o destino da Aresta.
  * 
- * @version %I%, %G%
  */
 @Entity
 @Getter

@@ -11,7 +11,6 @@ import lombok.Setter;
  * 
  * Classe para armazenar os códigos de duas disciplinas onde uma é pré-requisito da outra.
  * 
- * @version %I%, %G%
  */
 @Getter
 @Setter

@@ -35,7 +35,9 @@ import jakarta.persistence.EntityNotFoundException;
  * Os endpoints providos por essa controladora são:
  * <ul>
  * <li> GET "/curso"
+ * <li> GET "/curso/{cursoId}"
  * <li> GET "/curso/{cursoId}/disciplina"
+ * <li> GET "/curso/{cursoId}/disciplina/{disciplinaId}"
  * <li> GET "/curso/{cursoId}/path/{disciplinaId}"
  * <li> POST "/curso"
  * <li> POST "/curso/{cursoId}/disciplina"
@@ -46,10 +48,9 @@ import jakarta.persistence.EntityNotFoundException;
  * <li> PUT "/curso/{cursoId}/disciplina/{disciplinaId}"
  * <li> DELETE "/curso/{cursoId}"
  * <li> DELETE "/curso/{cursoId}/disciplina/{disciplinaId}"
- * </ul>
+ * </ul>  
  * Esses endpoints permitem a inclusão de cursos, disciplinas e pré-requisitos no banco de dados, assim como a deleção e modificação deles.
  * 
- * @version %I%, %G%
  */
 @RestController
 public class CursoController {
