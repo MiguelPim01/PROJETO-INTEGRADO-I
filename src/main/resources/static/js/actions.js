@@ -1,22 +1,23 @@
+/**
+ * Função responsável por listar os cursos na barra lateral do site.
+ * 
+ * @function listaCursos
+ */
 function listaCursos() {
     axios.get('/curso')
     .then(response => {
         const dataDisplay = document.getElementById('dropdown-content');
-        dataDisplay.innerHTML = ''; // Clear previous content
+        dataDisplay.innerHTML = ''; // Limpa conteudo anterior
+
         response.data.forEach(item => {
             const listItem = document.createElement('li');
             listItem.id = item.id;
             listItem.classList.add('curso');
 
-            listItem.textContent = item.nome; // Assuming each item has a 'nome' property
-            // Adicionando um ouvinte de eventos de clique ao listItem
+            listItem.textContent = item.nome; 
             listItem.addEventListener('click', function() {
-                // Chame aqui a função que você deseja executar ao clicar
-                apresentaDisciplinas(item); // Exemplo de chamada de função
-
+                apresentaDisciplinas(item);
                 trocaCSSCursosPadrao();
-
-                trocaCSSCursoClicado(item.id);
 
                 if(document.getElementsByClassName('cursoClicado')[0]){
                     var cursoClicado = document.getElementsByClassName('cursoClicado')[0];
@@ -24,6 +25,7 @@ function listaCursos() {
                 }
 
                 listItem.classList.add('cursoClicado');
+                trocaCSSCursoClicado(item.id);
             });
 
             dataDisplay.appendChild(listItem);
@@ -34,6 +36,11 @@ function listaCursos() {
     });
 }
 
+/**
+ * Coloca o CSS padrão nos cursos.
+ * 
+ * @function apresentaDisciplinas
+ */
 function trocaCSSCursosPadrao(){
     const cursos = document.getElementsByClassName('curso');
     Array.from(cursos).forEach(curso => {
@@ -42,6 +49,12 @@ function trocaCSSCursosPadrao(){
     });
 }
 
+/**
+ * Coloca o CSS de curso clicado.
+ * 
+ * @function apresentaDisciplinas
+ * @param {string} cursoId - Id do curso clicado.
+ */
 function trocaCSSCursoClicado(cursoId){
     const curso = document.getElementById(cursoId);
     curso.style.color = '#A1E887';
@@ -105,7 +118,7 @@ function criaButtonClose(){
     buttonClose.style.width = '180px';
     buttonClose.style.height = '90px';
     buttonClose.style.top = 'calc(100vh - 180px)';
-    buttonClose.style.right = 'calc(50vw - 90px)';
+    buttonClose.style.right = '90px';
     buttonClose.style.backgroundColor = '#537A5A';
     buttonClose.style.color = '#F5F5F5';
     buttonClose.style.border = 'none';
@@ -123,7 +136,7 @@ function criaButtonClose(){
         buttonClose.remove();
     });
 
-    dataDisplay = document.getElementById('paths');
+    const dataDisplay = document.getElementsByTagName('body')[0];
     dataDisplay.appendChild(buttonClose);
 }
 
