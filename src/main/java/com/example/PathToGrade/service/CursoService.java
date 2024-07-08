@@ -38,7 +38,7 @@ public class CursoService {
      * 
      * @param curso Curso a ser salvo.
      * @return id do curso salvo
-     * @throws InvalidCursoException
+     * @throws InvalidCursoException Curso invalido.
      */
     public Long saveCurso(Curso curso) throws InvalidCursoException {
         Iterable<Curso> cursos = cursoRepository.findAll();
@@ -62,7 +62,7 @@ public class CursoService {
      * 
      * @param id id do curso.
      * @return Curso
-     * @throws EntityNotFoundException
+     * @throws EntityNotFoundException Não encontrou o Curso no banco de dados.
      */
     public Curso getCursoById(Long id) throws EntityNotFoundException {
         Curso curso = cursoRepository.findById(id)
@@ -85,7 +85,8 @@ public class CursoService {
      * 
      * @param cursoId id do Curso.
      * @param curso novo Curso contendo as informações a serem modificadas.
-     * @throws RunTimeException
+     * @throws EntityNotFoundException Não encontrou alguma entidade.
+     * @throws InvalidCursoException Curso invalido.
      */
     public void modifyCurso(Long cursoId, Curso curso) throws EntityNotFoundException, InvalidCursoException {
         Curso c = this.getCursoById(cursoId);
@@ -119,8 +120,9 @@ public class CursoService {
      * 
      * @param cursoId id do Curso.
      * @param disciplina Disciplina a ser inserida.
-     * @throws InvalidDisciplinaException
-     * @throws EntityNotFoundException
+     * @return Long
+     * @throws InvalidDisciplinaException Disciplina invalida.
+     * @throws EntityNotFoundException Não encontrou alguma entidade.
      */
     public Long saveDisciplinaInCurso(Long cursoId, Disciplina disciplina) throws InvalidDisciplinaException, EntityNotFoundException {
         Curso curso = this.getCursoById(cursoId);
@@ -156,7 +158,7 @@ public class CursoService {
      * @param cId id do curso.
      * @param dId id da disciplina.
      * @return Disciplina
-     * @throws EntityNotFoundException
+     * @throws EntityNotFoundException Não encontrou alguma entidade.
      */
     public Disciplina getDisciplinaById(Long cId, Long dId) throws EntityNotFoundException {
         Curso curso = this.getCursoById(cId);
@@ -182,7 +184,7 @@ public class CursoService {
      * 
      * @param cursoId id do Curso.
      * @return Lista de Disciplinas.
-     * @throws RunTimeException
+     * @throws EntityNotFoundException Não encontrou alguma entidade.
      */
     public List<Disciplina> getDisciplinasFromCurso(Long cursoId) throws EntityNotFoundException {
         Curso curso = this.getCursoById(cursoId);
@@ -196,8 +198,8 @@ public class CursoService {
      * @param cursoId id do Curso.
      * @param disciplinaId id da Disciplina.
      * @param disciplina nova Disciplina contendo as informações a serem modificadas.
-     * @throws InvalidDisciplinaException
-     * @throws EntityNotFoundException
+     * @throws InvalidDisciplinaException Disciplina invalida.
+     * @throws EntityNotFoundException Não encontrou alguma entidade.
      */
     public void modifyDisciplinaFromCurso(Long cursoId, Long disciplinaId, Disciplina disciplina) throws InvalidDisciplinaException, EntityNotFoundException {
         Curso curso = this.getCursoById(cursoId);
@@ -226,7 +228,7 @@ public class CursoService {
      * 
      * @param cursoId id do Curso.
      * @param disciplinaId id da Disciplina.
-     * @throws EntityNotFoundException
+     * @throws EntityNotFoundException Não encontrou alguma entidade.
      */
     public void deleteDisciplinaFromCurso(Long cursoId, Long disciplinaId) throws EntityNotFoundException {
         Curso curso = this.getCursoById(cursoId);
@@ -255,8 +257,8 @@ public class CursoService {
      * 
      * @param cursoId id do Curso.
      * @param disciplinas lista de Disciplinas a serem inseridas.
-     * @throws InvalidDisciplinaException
-     * @throws EntityNotFoundException
+     * @throws InvalidDisciplinaException Disciplina invalida.
+     * @throws EntityNotFoundException Não encontrou alguma entidade.
      */
     public void saveDisciplinaListInCurso(Long cursoId, List<Disciplina> disciplinas) throws InvalidDisciplinaException, EntityNotFoundException {
         
@@ -271,8 +273,8 @@ public class CursoService {
      * @param cursoId id do Curso.
      * @param disciplinaA código do pré-requisito.
      * @param disciplinaB código da Disciplina.
-     * @throws EntityNotFoundException
-     * @throws InvalidDependenciaException
+     * @throws EntityNotFoundException Não encontrou alguma entidade.
+     * @throws InvalidDependenciaException Dependencia invalida.
      */
     public void addDependencia(Long cursoId, String disciplinaA, String disciplinaB) throws EntityNotFoundException, InvalidDependenciaException {
         Curso curso = this.getCursoById(cursoId);
@@ -291,8 +293,8 @@ public class CursoService {
      * 
      * @param cursoId id do Curso.
      * @param dependencias lista de Dependencias.
-     * @throws InvalidDependenciaException
-     * @throws EntityNotFoundException
+     * @throws InvalidDependenciaException Dependencia invalida.
+     * @throws EntityNotFoundException Não encontrou alguma entidade.
      */
     public void addDependenciaListInCurso(Long cursoId, List<Dependencia> dependencias) throws InvalidDependenciaException, EntityNotFoundException {
         for (Dependencia d : dependencias) {
@@ -307,7 +309,7 @@ public class CursoService {
      * @param cId id do Curso.
      * @param dId id da Disciplina.
      * @return conjunto de pares de disciplinas. Indicam todos os caminhos pelos quais os dfs's andaram.
-     * @throws EntityNotFoundException
+     * @throws EntityNotFoundException Lançada se não foi encontrado o Curso ou uma Disciplina
      */
     public Set<Pair<Disciplina, Disciplina>> getPathFromDisciplina(Long cId, Long dId) throws EntityNotFoundException {
         Curso curso = this.getCursoById(cId);

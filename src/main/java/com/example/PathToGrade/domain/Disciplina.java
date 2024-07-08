@@ -107,6 +107,7 @@ public class Disciplina {
      * Note: Essa função adiciona uma aresta chegando na disciplina e também adiciona uma aresta saindo do pré-requisito.
      * 
      * @param preRequisito disciplina pré-requisito. Não pode ser <code>null</code>.
+     * @throws InvalidDependenciaException Dependencia invalida.
      */
     public void addArestaChegando(Disciplina preRequisito) throws InvalidDependenciaException {
         Aresta a = new Aresta(preRequisito, this);
@@ -127,7 +128,7 @@ public class Disciplina {
      * <p>
      * Note: O método que deve ser usado é o {@link #addArestaChegando(Disciplina)} pois este já usa essa função.
      * 
-     * @param a
+     * @param a aresta a ser adicionada
      */
     public void addArestaSaindo(Aresta a) {
         this.arestasSaindo.add(a);
