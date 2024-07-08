@@ -142,10 +142,14 @@ public class CursoControllerTest {
         String url2 = "/curso/" + cursoId + "/path/" + disciplinaIdB;
 
         mockMvc.perform(get(url1).contentType(MediaType.APPLICATION_JSON))
-        .andExpect(status().isOk());
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$[0].a.codigo").value("COD00002"))
+        .andExpect(jsonPath("$[0].b.codigo").value("COD00003"));
 
         mockMvc.perform(get(url2).contentType(MediaType.APPLICATION_JSON))
-        .andExpect(status().isOk());
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$[0].a.codigo").value("COD00002"))
+        .andExpect(jsonPath("$[0].b.codigo").value("COD00003"));
     }
 
     @Test
