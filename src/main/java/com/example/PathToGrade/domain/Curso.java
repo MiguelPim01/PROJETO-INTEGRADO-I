@@ -75,9 +75,9 @@ public class Curso {
     /**
      * Retorna uma Disciplina de um Curso a partir do seu código
      * 
-     * @param codigo
+     * @param codigo codigo da Disciplina
      * @return Disciplina
-     * @throws EntityNotFoundException
+     * @throws EntityNotFoundException Não encontrou a Disciplina.
      */
     public Disciplina getDisciplinaByCodigo(String codigo) throws EntityNotFoundException {
         for (Disciplina d : this.disciplinas) {
@@ -104,8 +104,8 @@ public class Curso {
      * 
      * @param disciplinaA disciplina pré-requisito. Não pode ser <code>null</code>.
      * @param disciplinaB disciplina. Não pode ser <code>null</code>.
-     * @throws EntityNotFoundException
-     * @throws InvalidDependenciaException
+     * @throws EntityNotFoundException Não encontrou a Disciplina.
+     * @throws InvalidDependenciaException Disciplina inválida.
      */
     public void addPreRequisito(String disciplinaA, String disciplinaB) throws EntityNotFoundException, InvalidDependenciaException {
         Disciplina disciplina = null, preRequisito = null;
@@ -141,7 +141,7 @@ public class Curso {
      * 
      * @param disciplinaId id da disciplina em que o dfs irá iniciar.
      * @return Um conjunto com todos os pares de disciplinas encontrado pelo {@link #dfs(Set, Set, Disciplina)} e {@link #dfsTransp(Set, Set, Disciplina)}.
-     * @throws EntityNotFoundException
+     * @throws EntityNotFoundException Lançada se não encontrar alguma das Disciplinas.
      */
     public Set<Pair<Disciplina, Disciplina>> findPathToDisciplina(Long disciplinaId) throws EntityNotFoundException {
         Set<Disciplina> visitados = new HashSet<>();
