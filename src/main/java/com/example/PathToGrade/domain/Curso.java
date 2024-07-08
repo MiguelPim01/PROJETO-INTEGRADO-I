@@ -72,6 +72,13 @@ public class Curso {
         this.disciplinas = new ArrayList<>();
     }
 
+    /**
+     * Retorna uma Disciplina de um Curso a partir do seu código
+     * 
+     * @param codigo
+     * @return Disciplina
+     * @throws EntityNotFoundException
+     */
     public Disciplina getDisciplinaByCodigo(String codigo) throws EntityNotFoundException {
         for (Disciplina d : this.disciplinas) {
             if (d.getCodigo().equals(codigo)) {
@@ -98,6 +105,7 @@ public class Curso {
      * @param disciplinaA disciplina pré-requisito. Não pode ser <code>null</code>.
      * @param disciplinaB disciplina. Não pode ser <code>null</code>.
      * @throws EntityNotFoundException
+     * @throws InvalidDependenciaException
      */
     public void addPreRequisito(String disciplinaA, String disciplinaB) throws EntityNotFoundException, InvalidDependenciaException {
         Disciplina disciplina = null, preRequisito = null;

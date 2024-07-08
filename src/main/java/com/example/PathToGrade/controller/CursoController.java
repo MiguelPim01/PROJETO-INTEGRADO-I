@@ -63,7 +63,7 @@ public class CursoController {
     /**
      * Retorna todos os cursos do banco de dados.
      * 
-     * @return Lista de Cursos.
+     * @return Lista de Cursos. Retorna status: OK (200).
      */
     @GetMapping("/curso")
     public ResponseEntity<Iterable<Curso>> getCursos() {
@@ -74,6 +74,7 @@ public class CursoController {
      * Insere um Curso no banco de dados.
      * 
      * @param curso Curso passado no json.
+     * @return Retorna o id do Curso criado. Pode retornar status: CREATED (201), BAD_REQUEST (400).
      */
     @PostMapping("/curso")
     public ResponseEntity<Object> postCurso(@RequestBody Curso curso) {
@@ -95,7 +96,7 @@ public class CursoController {
      * Retorna um curso a partir de seu id.
      * 
      * @param id id do Curso.
-     * @return Curso.
+     * @return Retorna um Curso. Pode retornar status: OK (200), NOT_FOUND (404).
      */
     @GetMapping("/curso/{cursoId}")
     public ResponseEntity<Object> getCursoById(@PathVariable("cursoId") Long id) {
@@ -118,6 +119,7 @@ public class CursoController {
      * 
      * @param cursoId id do Curso.
      * @param curso novo Curso contendo as informações a serem modificadas.
+     * @return Pode retornar status: OK (200), NOT_FOUND (404), BAD_REQUEST (400).
      */
     @PutMapping("/curso/{cursoId}")
     public ResponseEntity<Object> putCurso(@PathVariable("cursoId") Long cursoId, @RequestBody Curso curso) {
@@ -146,6 +148,7 @@ public class CursoController {
      * Deleta um Curso do banco de dados.
      * 
      * @param cursoId id do Curso.
+     * @return Pode retornar status: OK (200), NOT_FOUND (404).
      */
     @DeleteMapping("/curso/{cursoId}")
     public ResponseEntity<Object> deleteCurso(@PathVariable(name = "cursoId") Long cursoId) {
@@ -166,7 +169,7 @@ public class CursoController {
      * Retorna todas as disciplinas de um Curso específico.
      * 
      * @param cursoId id do Curso.
-     * @return Lista de Disciplinas.
+     * @return Lista de Disciplinas. Pode retornar status: OK (200), NOT_FOUND (404).
      */
     @GetMapping("/curso/{cursoId}/disciplina")
     public ResponseEntity<Object> getDisciplinasFromCurso(@PathVariable("cursoId") Long cursoId) {
@@ -187,6 +190,7 @@ public class CursoController {
      * 
      * @param cursoId id do Curso.
      * @param disciplina Disciplina a ser inserida.
+     * @return Retorna o id da Disciplina criada. Pode retornar status: CREATED (201), NOT_FOUND (404), BAD_REQUEST (400).
      */
     @PostMapping("/curso/{cursoId}/disciplina")
     public ResponseEntity<Object> postDisciplinaInCurso(@PathVariable("cursoId") Long cursoId, @RequestBody Disciplina disciplina) {
@@ -214,7 +218,7 @@ public class CursoController {
      * 
      * @param cId id do Curso.
      * @param dId id da Disciplina.
-     * @return retorna uma ResponseEntity com HttpStatus OK se encontrar e HttpStatus NOT FOUND caso não encontre
+     * @return Retorna uma Disciplina. Pode retornar status: OK (200), NOT_FOUND (404)
      */
     @GetMapping("/curso/{cursoId}/disciplina/{disciplinaId}")
     public ResponseEntity<Object> getDisciplinasByIdFromCurso(@PathVariable("cursoId") Long cId, @PathVariable("disciplinaId") Long dId) {
@@ -238,6 +242,7 @@ public class CursoController {
      * @param cId id do Curso.
      * @param dId id da Disciplina.
      * @param disciplina nova Disciplina contendo as informações a serem modificadas.
+     * @return Pode retornar status: OK (200), NOT_FOUND (404), BAD_REQUEST (400).
      */
     @PutMapping("/curso/{cursoId}/disciplina/{disciplinaId}")
     public ResponseEntity<Object> putDisciplinaFromCurso(@PathVariable("cursoId") Long cId, @PathVariable("disciplinaId") Long dId, @RequestBody Disciplina disciplina) {
@@ -267,6 +272,7 @@ public class CursoController {
      * 
      * @param cId id do Curso.
      * @param dId id da Disciplina.
+     * @return Pode retornar status: OK (200), NOT_FOUND (404)
      */
     @DeleteMapping("/curso/{cursoId}/disciplina/{disciplinaId}")
     public ResponseEntity<Object> deleteDisciplinaFromCurso(@PathVariable("cursoId") Long cId, @PathVariable("disciplinaId") Long dId) {
@@ -290,6 +296,7 @@ public class CursoController {
      * 
      * @param cursoId id do Curso.
      * @param disciplinas lista de Disciplinas a ser inserida.
+     * @return Pode retornar status: CREATED (201), NOT_FOUND (404), BAD_REQUEST (400).
      */
     @PostMapping("/curso/{cursoId}/disciplinas")
     public ResponseEntity<Object> postDisciplinaListInCurso(@PathVariable("cursoId") Long cursoId, @RequestBody List<Disciplina> disciplinas) {
@@ -319,6 +326,7 @@ public class CursoController {
      * 
      * @param cursoId id do Curso.
      * @param dependencia indica qual Disciplina é pré-requisito da outra.
+     * @return Pode retornar status: CREATED (201), NOT_FOUND (404), BAD_REQUEST (400).
      */
     @PostMapping("/curso/{cursoId}/preRequisito")
     public ResponseEntity<Object> postDependencia(@PathVariable("cursoId") Long cursoId, @RequestBody Dependencia dependencia) {
@@ -349,13 +357,14 @@ public class CursoController {
      * 
      * @param cursoId id do Curso.
      * @param dependencias lista de dependencias.
+     * @return Pode retornar status: CREATED (201), NOT_FOUND (404), BAD_REQUEST (400).
      */
     @PostMapping("curso/{cursoId}/preRequisitos")
     public ResponseEntity<Object> postDependenciaListInCurso(@PathVariable("cursoId") Long cursoId, @RequestBody List<Dependencia> dependencias) {
         try {
             cursoService.addDependenciaListInCurso(cursoId, dependencias);
 
-            return ResponseEntity.status(HttpStatus.OK).build();
+            return ResponseEntity.status(HttpStatus.CREATED).build();
         }
         catch (EntityNotFoundException e) {
             Map<String, String> errorResponse = new HashMap<>();
@@ -379,7 +388,7 @@ public class CursoController {
      * 
      * @param cId id do Curso.
      * @param dId id da Disciplina.
-     * @return conjunto de pares de disciplinas. Indicam todos os caminhos pelos quais os dfs's andaram.
+     * @return Conjunto de pares de disciplinas. Indicam todos os caminhos pelos quais os dfs's andaram. Pode retornar status: OK (200), NOT_FOUND (404)
      */
     @GetMapping("curso/{cursoId}/path/{disciplinaId}")
     public ResponseEntity<Object> getPathFromDisciplina(@PathVariable("cursoId") Long cId, @PathVariable("disciplinaId") Long dId) {
