@@ -2,6 +2,16 @@
 
 Este é um aplicativo desenvolvido para Desktop Web proporcionando aos estudantes universitários uma facilidade maior ao planejarem as matérias que irão fazer a cada semestre.
 
+## Como utilizar
+
+Clone o repositório em sua máquina e rode o seguinte comando na pasta raiz do projeto para subir o servidor:
+
+```bash
+./mvnw spring-boot:run
+```
+
+Em seguida, utilize o navegador de sua preferência e acesse localhost:8080.
+
 ## Funcionalidades
 
 É um aplicativo simples e intuitivo, ao abri-lo você irá se deparar com a seguinte tela:
