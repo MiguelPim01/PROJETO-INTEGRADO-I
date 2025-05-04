@@ -1,16 +1,29 @@
-# PATHtoGRADE
+# PathToGrade
 
-Este é um aplicativo desenvolvido para Desktop Web proporcionando aos estudantes universitários uma facilidade maior ao planejarem as matérias que irão fazer a cada semestre.
+Este é um aplicativo desenvolvido para Desktop Web destinado aos estudantes universitários. Ele foi desenvolvido para a disciplina de Projeto Integrado I da Universidade Federal do Espírito Santo e tem como objetivo facilitar o planejamento dos estudantes na realização das matérias.  
 
-## Como utilizar
+Neste aplicativo o estudante poderá visualizar todos os pré-requisitos de matérias do curso de forma simples e intuitiva e, com isso, não gastará mais um tempo exorbitante olhando os pré-requisitos de cada matéria manualmente.
 
-Clone o repositório em sua máquina e rode o seguinte comando na pasta raiz do projeto para subir o servidor:
+## Instalação
 
+Para a instalação basta apenas clonar o repositório e ter uma versão Java 21 ou superior instalada em sua máquina:
+```bash
+git clone git@github.com:MiguelPim01/PROJETO-INTEGRADO-I.git
+```
+
+## Utilização
+
+Entre na pasta raiz do projeto após clonar ele:
+```bash
+cd PROJETO-INTEGRADO-I
+```
+
+Rode o seguinte comando na pasta raiz pelo terminal:
 ```bash
 ./mvnw spring-boot:run
 ```
 
-Em seguida, utilize o navegador de sua preferência e acesse localhost:8080.
+Após o servidor ter subido corretamente, acesse o link [pathtograde_project](http://localhost:8080/) para acessar a aplicação em seu navegador.
 
 ## Funcionalidades
 
@@ -46,8 +59,5 @@ Para o front-end, como é uma aplicação simples de apenas uma tela, foi utiliz
 
 ## Desenvolvedores
 
-[Miguel Vieira Machado Pim](https://github.com/MiguelPim01)  
-[Pedro Henrique Bravim Duarte](https://github.com/PhenBD)
-
-### PROJETO-INTEGRADO-I
-Aplicação desenvolvida para a disciplina de Projeto Integrado I
+1. [Miguel Vieira Machado Pim](https://github.com/MiguelPim01)  
+2. [Pedro Henrique Bravim Duarte](https://github.com/PhenBD)
