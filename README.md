@@ -13,6 +13,8 @@ git clone git@github.com:MiguelPim01/PROJETO-INTEGRADO-I.git
 
 ## Utilização
 
+### Opção 1: Via terminal
+
 Entre na pasta raiz do projeto após clonar ele:
 ```bash
 cd PROJETO-INTEGRADO-I
@@ -23,7 +25,24 @@ Rode o seguinte comando na pasta raiz pelo terminal:
 ./mvnw spring-boot:run
 ```
 
-Após o servidor ter subido corretamente, acesse o link [pathtograde_project](http://localhost:8080/) para acessar a aplicação em seu navegador.
+### Opção 2: Via Docker
+
+Entre na pasta raiz do projeto após clonar ele:
+```bash
+cd PROJETO-INTEGRADO-I
+```
+
+Crie uma imagem a partir do projeto:
+```bash
+docker build -t pathtograde-app .
+```
+
+Rode a imagem:
+```bash
+docker run -p 8080:8080 pathtograde-app
+```
+
+Após o servidor ter subido corretamente, clique no link [pathtograde_project](http://localhost:8080/) para acessar a aplicação em seu navegador.
 
 ## Funcionalidades
 
@@ -31,17 +50,17 @@ Após o servidor ter subido corretamente, acesse o link [pathtograde_project](ht
   
 ![alt text](readme-images/image.png)
 
-Onde na esquerda você pode ver todos os cursos cadastrados no sistema e clicar no qual deseja navegar. Ao selecionar um curso vai ser listado por período cada matéria presente no curso, da seguinte forma:
+Na parte esquerda da tela você pode ver todos os cursos cadastrados no sistema e clicar no qual deseja navegar. Ao selecionar um curso, todas as matérias serão listadas por período da seguinte forma:
 
 ![alt text](readme-images/image-1.png)
 
 É possível utilizar o scroll do mouse ou clicar na barra na parte inferior da tela, para navegar para a direita e ver os restante dos períodos.
 
-Digamos que nesse caso onde o curso de Ciência da Computação foi o escolhido, eu queira saber todas as displinas relacionadas (que fazem parte do mesmo "caminho") com a disciplina de Técnicas de Busca e Ordenação. Basta eu clicar na caixa da disciplina, que deverá ser apresentado as relações da seguinte maneira:
+Digamos que o curso de Ciência da Computação tenha sido escolhido e o usuário queira saber todas as displinas relacionadas (que fazem parte do mesmo "caminho") com a disciplina de Técnicas de Busca e Ordenação. Basta clicar na caixa da disciplina, que será apresentado as relações da seguinte maneira:
 
 ![alt text](readme-images/image-2.png)
 
-Caso queira retornar ao padrão, há um botão na inferior esquerda escrito "Voltar". Ou então basta clicar em outra disciplina que gostaria de navegar.
+Caso queira retornar ao padrão, há um botão na inferior esquerda escrito "Voltar". Ou então, basta clicar em outra disciplina que gostaria de navegar.
 
 ## Técnologias Utilizadas
 
